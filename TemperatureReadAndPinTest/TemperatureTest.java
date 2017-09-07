@@ -35,6 +35,7 @@ public class TemperatureTest
     /**
      * Constructor for objects of class TemperatureTest
      */
+
     public TemperatureTest() {
 
         // setup wiringPi
