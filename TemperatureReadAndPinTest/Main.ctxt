@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.params=args
+comment0.target=Main(java.lang.String[])
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Main\r\n\ Promts\ user\ for\ variables,\ writes\ them\ to\ a\ file,\ and\ then\ runs\ everything\ else\r\n
+comment1.params=restoreFromFile
+comment1.target=Main(boolean)
+comment1.text=\r\n\ \r\n
+comment2.params=
+comment2.target=void\ run()
+comment2.text=\r\n\ \r\n
+comment3.params=
+comment3.target=void\ getSensorData()
+comment3.text=\r\n\ \r\n
+comment4.params=
+comment4.target=void\ controlLogic()
+comment4.text=\r\n\ \r\n
+comment5.params=
+comment5.target=void\ takeAction()
+comment5.text=\r\n\ \r\n
+comment6.params=
+comment6.target=void\ testActions()
+comment6.text=\r\n\ \r\n
+numComments=7

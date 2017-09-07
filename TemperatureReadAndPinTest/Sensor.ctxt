@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Sensor()
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Sensor\r\n
+comment1.params=type
+comment1.target=float\ readData(int)
+comment2.params=
+comment2.target=java.lang.String\ getName()
+numComments=3

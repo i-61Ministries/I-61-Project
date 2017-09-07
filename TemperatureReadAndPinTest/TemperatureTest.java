@@ -27,10 +27,13 @@ import com.pi4j.wiringpi.GpioUtil;
  * @author Eric Smith and yglodt
  * @version 3/26/2017
  */
-public class TemperatureTest
+public class TemperatureTest extends Sensor
 {
     private static final int    MAXTIMINGS  = 85;
     private final int[]         dht11_dat   = { 0, 0, 0, 0, 0 };
+    private float humidity;
+    private float temperature;
+
 
     /**
      * Constructor for objects of class TemperatureTest
@@ -46,7 +49,7 @@ public class TemperatureTest
         GpioUtil.export(3, GpioUtil.DIRECTION_OUT);
     }
 
-    public void getTemperature(final int pin) {
+    public boolean getTemperature(final int pin) {
         int laststate = Gpio.HIGH;
         int j = 0;
         dht11_dat[0] = dht11_dat[1] = dht11_dat[2] = dht11_dat[3] = dht11_dat[4] = 0;
@@ -100,8 +103,12 @@ public class TemperatureTest
             }
             final float f = c * 1.8f + 32;
             System.out.println("Humidity = " + h + " Temperature = " + c + "(" + f + "f)");
+            humidity = h;
+            temperature = f;
+            return true;
         } else {
-            System.out.println("Data not good, skip");
+            //System.out.println("Data not good, skip");
+            return false;
         }
 
     }
@@ -114,13 +121,37 @@ public class TemperatureTest
 
         final TemperatureTest dht = new TemperatureTest();
 
-        for (int i = 0; i < 10; i++) {
+        /**for (int i = 0; i < 10; i++) {
             Thread.sleep(2000);
             dht.getTemperature(21);
+        }*/
+
+        while(!dht.getTemperature(21)){
+            Thread.sleep(2000);
+            //dht.getTemperature(21);
         }
 
-        System.out.println("Done!!");
+        //System.out.println("Done!!");
 
     }
 
+    @Override
+    public float readData(int type){
+        String[] args = new String[1];
+
+        try{
+                main(args);
+        }
+        catch(Exception e){
+            System.out.println("Read Data Error");
+            System.out.println(e.getStackTrace());
+        }
+
+        if(type==1){
+            return humidity;
+        }
+        else{
+            return temperature;
+        }
+    }
 }
