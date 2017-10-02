@@ -29,6 +29,11 @@ import com.pi4j.wiringpi.GpioUtil;
 public abstract class Sensor
 {
     private String name;
+    private boolean takeAction;
+    private double upperBound;
+    private double lowerBound;
+    private double midPoint;
+    private Device action;
     
     /**
      * Constructor for objects of class Sensor
