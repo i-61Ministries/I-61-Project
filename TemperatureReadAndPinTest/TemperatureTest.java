@@ -135,6 +135,7 @@ public class TemperatureTest extends Sensor
 
     }
 
+
     @Override
     public float readData(int type){
         String[] args = new String[1];
@@ -154,4 +155,5 @@ public class TemperatureTest extends Sensor
             return temperature;
         }
     }
+
 }
