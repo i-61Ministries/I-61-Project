@@ -63,7 +63,7 @@ public class Main
     private void getSensorData(){
         for(Sensor s:sensors){
             switch(s.getName()){
-                case "TempAndHum":
+                case "dht11":
                         data.add("Humidity:" + s.readData(1));
                         data.add("Temperature:" + s.readData(0));
                         break;

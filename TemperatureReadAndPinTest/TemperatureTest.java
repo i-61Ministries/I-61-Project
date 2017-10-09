@@ -33,13 +33,24 @@ public class TemperatureTest extends Sensor
     private final int[]         dht11_dat   = { 0, 0, 0, 0, 0 };
     private float humidity;
     private float temperature;
-
+    
+    public String name;
+    public boolean takeActionUp;
+    public boolean takeActionLow;
+    public boolean uBound;
+    public boolean lBound;
+    public float upperBound;
+    public float lowerBound;
+    public double midPoint;
+    public Device actionUp;
+    public Device actionLow;
+    public int[] types;
 
     /**
      * Constructor for objects of class TemperatureTest
      */
-    public TemperatureTest() {
-
+    public TemperatureTest(boolean takeActionUp, boolean takeActionLow, boolean uBound, boolean lBound, float upperBound, float lowerBound,Device action, int[] types, Device actionLow) {
+        super(takeActionUp,takeActionLow,uBound,lBound,upperBound,lowerBound,action,types,actionLow);
         // setup wiringPi
         if (Gpio.wiringPiSetup() == -1) {
             System.out.println(" ==>> GPIO SETUP FAILED");
@@ -48,8 +59,15 @@ public class TemperatureTest extends Sensor
 
         GpioUtil.export(3, GpioUtil.DIRECTION_OUT);
     }
+    
+    public void getTemp() throws Exception{
+        while(!getTemperature(21)){
+            Thread.sleep(2000);
+            //dht.getTemperature(21);
+        }
+    }
 
-    public boolean getTemperature(final int pin) {
+    private boolean getTemperature(final int pin) {
         int laststate = Gpio.HIGH;
         int j = 0;
         dht11_dat[0] = dht11_dat[1] = dht11_dat[2] = dht11_dat[3] = dht11_dat[4] = 0;
@@ -117,31 +135,30 @@ public class TemperatureTest extends Sensor
         return dht11_dat[4] == (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3] & 0xFF);
     }
 
-    public static void main(final String ars[]) throws Exception {
-
-        final TemperatureTest dht = new TemperatureTest();
-
-        /**for (int i = 0; i < 10; i++) {
-            Thread.sleep(2000);
-            dht.getTemperature(21);
-        }*/
-
-        while(!dht.getTemperature(21)){
-            Thread.sleep(2000);
-            //dht.getTemperature(21);
-        }
-
-        //System.out.println("Done!!");
-
-    }
+//    public static void main(final String ars[]) throws Exception {
+//
+//        final TemperatureTest dht = new TemperatureTest();
+//
+//        /**for (int i = 0; i < 10; i++) {
+//            Thread.sleep(2000);
+//            dht.getTemperature(21);
+//        }*/
+//
+//        while(!dht.getTemperature(21)){
+//            Thread.sleep(2000);
+//            //dht.getTemperature(21);
+//        }
+//
+//        //System.out.println("Done!!");
+//
+//    }
 
 
     @Override
     public float readData(int type){
-        String[] args = new String[1];
 
         try{
-                main(args);
+            getTemp();
         }
         catch(Exception e){
             System.out.println("Read Data Error");

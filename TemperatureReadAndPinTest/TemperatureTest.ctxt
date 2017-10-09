@@ -1,13 +1,13 @@
 #BlueJ class context
-comment0.params=
-comment0.target=TemperatureTest()
+comment0.params=takeActionUp\ takeActionLow\ uBound\ lBound\ upperBound\ lowerBound\ action\ types\ actionLow
+comment0.target=TemperatureTest(boolean,\ boolean,\ boolean,\ boolean,\ float,\ float,\ Device,\ int[],\ Device)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ TemperatureTest\r\n
-comment1.params=pin
-comment1.target=boolean\ getTemperature(int)
-comment2.params=
-comment2.target=boolean\ checkParity()
-comment3.params=ars
-comment3.target=void\ main(java.lang.String[])
+comment1.params=
+comment1.target=void\ getTemp()
+comment2.params=pin
+comment2.target=boolean\ getTemperature(int)
+comment3.params=
+comment3.target=boolean\ checkParity()
 comment4.params=type
 comment4.target=float\ readData(int)
 numComments=5
