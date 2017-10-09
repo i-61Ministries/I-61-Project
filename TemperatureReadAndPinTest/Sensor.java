@@ -33,10 +33,10 @@ public abstract class Sensor
     public boolean takeActionLow;
     public boolean uBound;
     public boolean lBound;
-    public float upperBound;
+    public float upperBound;//Sensor's physical capibilities
     public float lowerBound;
     public double midPoint;
-    public Device actionUp;
+    public Device actionUp;//SWITCH HANDLING OF CASES TO DEVICES
     public Device actionLow;
     public int[] types;
     
