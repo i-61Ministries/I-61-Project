@@ -22,45 +22,28 @@ import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.GpioUtil;
 /**
  * Write a description of class Sensor here.
+ * abstract class for generic sensor properties
  * 
  * @author Kevin Sikes 
- * @version 10/2/2017
+ * @version 10/14/2017
  */
 public abstract class Sensor
 {
     public String name;
-    public boolean takeActionUp;
-    public boolean takeActionLow;
-    public boolean uBound;
-    public boolean lBound;
     public float upperBound;//Sensor's physical capibilities
     public float lowerBound;
-    public double midPoint;
-    public Device actionUp;//SWITCH HANDLING OF CASES TO DEVICES
-    public Device actionLow;
     public int[] types;
+    public String[] typesName;
     
     /**
      * Constructor for objects of class Sensor
      */
-    public Sensor(boolean takeActionUp, boolean takeActionLow, boolean uBound, boolean lBound, float upperBound, float lowerBound,Device action, int[] types, Device actionLow)
+    public Sensor(float upperBound, float lowerBound, int[] types, String[]typesName)
     {
-        this.takeActionUp = takeActionUp;
-        this.takeActionLow = takeActionLow;
-        this.uBound = uBound;
-        this.lBound = lBound;
         this.upperBound = upperBound;
         this.lowerBound = lowerBound;
-        this.actionUp = actionUp;
-        this.actionLow = actionLow;
         this.types = types;
-        if(uBound&&lBound){
-            setMid();/**add good point?*/
-        }
-    }
-    
-    private void setMid(){
-        midPoint = (upperBound+lowerBound)/2;
+        this.typesName = typesName;
     }
 
     public abstract float readData(int type);

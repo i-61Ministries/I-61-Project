@@ -24,8 +24,8 @@ import com.pi4j.wiringpi.GpioUtil;
 /**
  * This will read the teamperature of the dht11 for the raspberry [pi
  * https://stackoverflow.com/questions/28486159/read-temperature-from-dht11-using-pi4j
- * @author Eric Smith and yglodt
- * @version 3/26/2017
+ * @author Eric Smith and yglodt and modified by Kevin Sikes
+ * @version 10/14/2017
  */
 public class TemperatureTest extends Sensor
 {
@@ -35,22 +35,16 @@ public class TemperatureTest extends Sensor
     private float temperature;
     
     public String name;
-    public boolean takeActionUp;
-    public boolean takeActionLow;
-    public boolean uBound;
-    public boolean lBound;
     public float upperBound;
     public float lowerBound;
-    public double midPoint;
-    public Device actionUp;
-    public Device actionLow;
     public int[] types;
+    public String[] typesName;
 
     /**
      * Constructor for objects of class TemperatureTest
      */
-    public TemperatureTest(boolean takeActionUp, boolean takeActionLow, boolean uBound, boolean lBound, float upperBound, float lowerBound,Device action, int[] types, Device actionLow) {
-        super(takeActionUp,takeActionLow,uBound,lBound,upperBound,lowerBound,action,types,actionLow);
+    public TemperatureTest(float upperBound, float lowerBound, int[] types, String[] typesName) {
+        super(upperBound,lowerBound,types,typesName);
         // setup wiringPi
         if (Gpio.wiringPiSetup() == -1) {
             System.out.println(" ==>> GPIO SETUP FAILED");

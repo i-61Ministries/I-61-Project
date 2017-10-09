@@ -1,5 +1,8 @@
 #BlueJ class context
-comment0.params=
-comment0.target=Device()
+comment0.params=sensorControlled\ controller\ sensorDataType\ criticalPoint\ takeActionUp\ upperActionBound\ takeActionLow\ lowerActionBound
+comment0.target=Device(boolean,\ Sensor,\ int,\ float,\ boolean,\ float,\ boolean,\ float)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Device\r\n
-numComments=1
+comment1.params=
+comment1.target=int\ needsAction()
+comment1.text=\r\n\ -1\ means\ power\ controlled\r\n\ 0\ means\ no\ action\ required;\r\n\ 1\ means\ that\ upper\ bound\ was\ reached\ and\ needs\ action\r\n\ 2\ means\ that\ lower\ bound\ was\ reached\ and\ needs\ action\r\n
+numComments=2
