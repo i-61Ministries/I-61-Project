@@ -29,6 +29,7 @@ public class Main
         System.out.println();
         //code in promts and file writer
         System.out.println("Setup complete! Type \'Exit\' and press enter to stop.");
+        devicePrompt(in);
         while(!exit){
             run();
             try{
@@ -56,23 +57,23 @@ public class Main
     private void devicePrompt(Scanner in){
         String statement;
         Device d;
-        Sensor controller;
-        int sensorDataType;
+        Sensor controller = null;
+        int sensorDataType = 0;
         boolean sensorControlled;
-        boolean takeActionUp;
-        boolean takeActionLow;
-        float upperActionBound;
-        float lowerActionBound;
-        float criticalPoint;
-        float powerUsage;
+        boolean takeActionUp = false;
+        boolean takeActionLow = false;
+        float upperActionBound = 0.0f;
+        float lowerActionBound = 0.0f;
+        float criticalPoint = 0.0f;
+        float powerUsage = 0.0f;
         while(true){
             System.out.println("Will this device be controlled by a sensor?(Yes/No)");
             statement = in.nextLine().toLowerCase();
-            if(statement == "yes"){
+            if(statement.equals("yes")){
                 sensorControlled = true;
                 break;
             }
-            else if(statement == "no"){
+            else if(statement.equals("no")){
                 sensorControlled = false;
                 break;
             }
@@ -82,7 +83,7 @@ public class Main
         }
         while(sensorControlled){
             System.out.println("Which sensor will control the device?(type the number of the sensor from the given list)");
-            for(int x = 0;0<sensors.length;x++){
+            for(int x = 0;x<sensors.length-1;x++){
                 if(sensors[x] != null){
                     System.out.println(x + ":" + sensors[x].getName());
                 }
@@ -91,31 +92,116 @@ public class Main
             try{
                 if(sensors[Integer.parseInt(statement)] !=null){
                     controller = sensors[Integer.parseInt(statement)];
+                    while(controller.types.length>1){
+                        System.out.println("What data type will the device use?");
+                        for(int x = 0;x<controller.types.length;x++){
+                            if(sensors[x] != null){
+                                System.out.println(x + ":" + controller.typesName[x]);
+                            }
+                        }
+                        statement = in.nextLine();
+                        try{
+                            if(Integer.parseInt(statement)<controller.types.length&&Integer.parseInt(statement)>=0){
+                                sensorDataType = controller.types[Integer.parseInt(statement)];
+                                break;
+                            }
+                            else{
+                                System.out.println("Please pick one of the data types shown");
+                            }
+                        }
+                        catch(Exception e){
+                            System.out.println("Please answer with a valid number");
+                        }
+                    }
+                    while(true){
+                        System.out.println("Does the device need to react if the data from the sensor is above a certain value? (yes/no)");
+                        statement = in.nextLine();
+                        if(statement.toLowerCase().equals("yes")){
+                            takeActionUp=true;
+                            while(true){
+                                System.out.println("What is the value? EX: 74.3");
+                                try{
+                                    upperActionBound = Float.parseFloat(statement);
+                                    break;
+                                }
+                                catch(Exception e){
+                                    System.out.println("Please answer with a valid number containing a decimal");
+                                }
+                            }
+                            break;
+                        }
+                        else if(statement.toLowerCase().equals("no")){
+                            takeActionUp=false;
+                            break;
+                        }
+                        else{
+                            System.out.println("Please answer with \'yes\' or \'no\'");
+                        }
+                    }
+                    while(true){
+                        System.out.println("Does the device need to react if the data from the sensor is below a certain value? (yes/no)");
+                        statement = in.nextLine();
+                        if(statement.toLowerCase().equals("yes")){
+                            takeActionLow=true;
+                            while(true){
+                                System.out.println("What is the value? EX: 73.2");
+                                try{
+                                    lowerActionBound = Float.parseFloat(statement);/**could search to see if there iss a decimal and if not add it myself*/
+                                    break;
+                                }
+                                catch(Exception e){
+                                    System.out.println("Please answer with a valid number containing a decimal");
+                                }
+                            }
+                            break;
+                        }
+                        else if(statement.toLowerCase().equals("no")){
+                            takeActionLow=false;
+                            break;
+                        }
+                        else{
+                            System.out.println("Please answer with \'yes\' or \'no\'");
+                        }
+                    }
+                    while(true){
+                        System.out.println("What sensor value is best for the device to turn off at? \n EX: An air conditioner set to turn off when a room cools to 75.0 degrees farenheight");
+                        statement = in.nextLine();
+                        try{
+                            criticalPoint = Float.parseFloat(statement);/**could search to see if there is a decimal and if not add it myself*/
+                            break;
+                        }
+                        catch(Exception e){
+                            System.out.println("Please answer with a valid number containing a decimal");
+                        }
+                    }
                     break;
+                }
+                else{
+                    System.out.println("Please pick one of the sensors shown");
                 }
             }
             catch(Exception e){
                 System.out.println("Please answer with a valid number");
             }
         }
-        /**while(controller.types.length>1){
-            System.out.println("What data type will the device use?");
-            for(int x = 0;0<controller.types.length;x++){
-                if(sensors[x] != null){
-                    System.out.println(x + ":" + controller.typesName[x]);
-                }
-            }
+        while(true){
+            System.out.println("How much power does the device use in Amps/Hour? EX: 3.1");
             statement = in.nextLine();
             try{
-                if(Integer.parseInt(statement)>=controller.types.length){
-                    sensorDataType = controller.types[Integer.parseInt(statement)];
-                    break;
-                }
+                powerUsage = Float.parseFloat(statement);/**could search to see if there is a decimal and if not add it myself*/
+                break;
             }
             catch(Exception e){
-                System.out.println("Please answer with a valid number");
+                System.out.println("Please answer with a valid number containing a decimal");
             }
-        }*/
+        }
+        d = new Device(sensorControlled,controller,sensorDataType,criticalPoint,takeActionUp,upperActionBound,takeActionLow,lowerActionBound);
+        for(int x = 0;x<devices.length-1;x++){
+            if(devices[x] == null){
+                devices[x] = d;
+                break;
+            }
+        }
     }
     
     /**
