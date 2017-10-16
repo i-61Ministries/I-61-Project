@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=upperBound\ lowerBound\ types\ typesName
-comment0.target=Sensor(float,\ float,\ int[],\ java.lang.String[])
+comment0.params=upperBound\ lowerBound\ types\ typesName\ pin
+comment0.target=Sensor(float,\ float,\ int[],\ java.lang.String[],\ int)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Sensor\r\n
 comment1.params=type
 comment1.target=float\ readData(int)

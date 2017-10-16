@@ -34,22 +34,22 @@ public abstract class Sensor
     public float lowerBound;
     public int[] types;
     public String[] typesName;
+    public int pin;
     
     /**
      * Constructor for objects of class Sensor
      */
-    public Sensor(float upperBound, float lowerBound, int[] types, String[]typesName)
+    public Sensor(float upperBound, float lowerBound, int[] types, String[]typesName, int pin)
     {
         this.upperBound = upperBound;
         this.lowerBound = lowerBound;
         this.types = types;
         this.typesName = typesName;
+        this.pin = pin;
     }
 
     public abstract float readData(int type);
     
-    public String getName(){
-        return name;
-    }
+    public abstract String getName();
     
 }

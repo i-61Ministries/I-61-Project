@@ -34,17 +34,23 @@ public class TemperatureTest extends Sensor
     private float humidity;
     private float temperature;
     
-    public String name;
+    public String name = "dht11";
     public float upperBound;
     public float lowerBound;
     public int[] types;
     public String[] typesName;
+    public int pin;
 
     /**
      * Constructor for objects of class TemperatureTest
      */
-    public TemperatureTest(float upperBound, float lowerBound, int[] types, String[] typesName) {
-        super(upperBound,lowerBound,types,typesName);
+    public TemperatureTest(float upperBound, float lowerBound, int[] types, String[] typesName, int pin) {
+        super(upperBound,lowerBound,types,typesName, pin);
+        this.upperBound = upperBound;
+        this.lowerBound = lowerBound;
+        this.types = types;
+        this.typesName = typesName;
+        this.pin = pin;
         // setup wiringPi
         if (Gpio.wiringPiSetup() == -1) {
             System.out.println(" ==>> GPIO SETUP FAILED");
@@ -55,10 +61,14 @@ public class TemperatureTest extends Sensor
     }
     
     public void getTemp() throws Exception{
-        while(!getTemperature(21)){
+        while(!getTemperature(pin)){
             Thread.sleep(2000);
             //dht.getTemperature(21);
         }
+    }
+    
+    public String getName(){
+        return name;
     }
 
     private boolean getTemperature(final int pin) {

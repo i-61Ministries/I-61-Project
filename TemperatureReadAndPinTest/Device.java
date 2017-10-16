@@ -17,11 +17,12 @@ public class Device
     public float lowerActionBound;
     public float criticalPoint;
     public float powerUsage;
+    public int pin;
 
     /**
      * Constructor for objects of class Device
      */
-    public Device(boolean sensorControlled, Sensor controller, int sensorDataType, float criticalPoint,boolean takeActionUp, float upperActionBound, boolean takeActionLow, float lowerActionBound)
+    public Device(boolean sensorControlled, Sensor controller, int sensorDataType, float criticalPoint,boolean takeActionUp, float upperActionBound, boolean takeActionLow, float lowerActionBound, int pin)
     {
         this.sensorControlled = sensorControlled;
         if(!sensorControlled){
@@ -48,6 +49,7 @@ public class Device
             this.sensorDataType = sensorDataType;
         }
         this.powerUsage = powerUsage;
+        this.pin = pin;
     }
     
     /**

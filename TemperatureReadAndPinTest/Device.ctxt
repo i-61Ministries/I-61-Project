@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=sensorControlled\ controller\ sensorDataType\ criticalPoint\ takeActionUp\ upperActionBound\ takeActionLow\ lowerActionBound
-comment0.target=Device(boolean,\ Sensor,\ int,\ float,\ boolean,\ float,\ boolean,\ float)
+comment0.params=sensorControlled\ controller\ sensorDataType\ criticalPoint\ takeActionUp\ upperActionBound\ takeActionLow\ lowerActionBound\ pin
+comment0.target=Device(boolean,\ Sensor,\ int,\ float,\ boolean,\ float,\ boolean,\ float,\ int)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Device\r\n
 comment1.params=
 comment1.target=int\ needsAction()

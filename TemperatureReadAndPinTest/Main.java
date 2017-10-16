@@ -10,25 +10,31 @@ public class Main
 {
     private int sleepTime;
     private Device[] devices = new Device[30];
+    private int numberOfDevices = 0;
     private Sensor[] sensors = new Sensor[30];
+    private int numberOfSensors = 0;
     private double systemVoltage;
     private ArrayList<String> data;
-    //private double
+    private String[] preDefinedSensorNames = new String[1];
 
     /**
      * Constructor for objects of class Main
      * Promts user for variables, writes them to a file, and then runs everything else
      */
     public Main(String[] args){
+        //setting up pre-defined sensor names
+        preDefinedSensorNames[0] = "dht11";
+        //initializing variables
         boolean exit = false;
         data = new ArrayList<String>();
         sleepTime = 10000;
-        System.out.println("");
+        System.out.println("Staring Setup");
         Scanner in = new Scanner (System.in);
         String statement = in.nextLine();
         System.out.println();
         //code in promts and file writer
         System.out.println("Setup complete! Type \'Exit\' and press enter to stop.");
+        sensorPrompt(in);
         devicePrompt(in);
         while(!exit){
             run();
@@ -40,7 +46,7 @@ public class Main
                 System.out.println(e.getStackTrace());
             }
             if(in.hasNext()){
-                if(in.nextLine() == "Exit"){
+                if(in.nextLine().toLowerCase() == "exit"){
                     exit=true;
                 }
             }
@@ -48,7 +54,50 @@ public class Main
     }
     
     private void sensorPrompt(Scanner in){
-        
+        String statement;
+        while(true){
+            System.out.println("Which sensor will you be using? (type the number by the sensor type)");
+            int x = 0;
+            for(String s:preDefinedSensorNames){
+                if(s != null){
+                    System.out.println(x + ": " + s);
+                }
+                x++;
+            }
+            statement = in.nextLine();
+            try{
+                boolean notASensor = false;
+                switch(Integer.parseInt(statement)){
+                    case 0:
+                        int[] typeAry = {0,1};
+                        String[] typeNameAry = {"Humidity","Temperature"};
+                        int pin;
+                        while(true){
+                            System.out.println("What GPIO pin will the sensor use? (EX: 21)");
+                            statement = in.nextLine();
+                            try{
+                                pin = Integer.parseInt(statement);
+                                break;
+                            }
+                            catch(Exception e){
+                                System.out.println("Please answer with a valid number");
+                            }
+                        }
+                        sensors[numberOfSensors] = new TemperatureTest(32.0f,122.0f,typeAry ,typeNameAry,pin);
+                        numberOfSensors++;
+                        break;
+                    default: System.out.println("Please answer with a valid number");
+                        notASensor=true;
+                        break;
+                }
+                if(!notASensor){
+                    break;
+                }
+            }
+            catch(Exception e){
+                System.out.println("Please answer with a valid number");
+            }
+        }
     }
     
     /**
@@ -66,6 +115,7 @@ public class Main
         float lowerActionBound = 0.0f;
         float criticalPoint = 0.0f;
         float powerUsage = 0.0f;
+        int pin = 0;
         while(true){
             System.out.println("Will this device be controlled by a sensor?(Yes/No)");
             statement = in.nextLine().toLowerCase();
@@ -195,7 +245,18 @@ public class Main
                 System.out.println("Please answer with a valid number containing a decimal");
             }
         }
-        d = new Device(sensorControlled,controller,sensorDataType,criticalPoint,takeActionUp,upperActionBound,takeActionLow,lowerActionBound);
+        while(true){
+            System.out.println("What GPIO pin will the sensor use? (EX: 21)");
+            statement = in.nextLine();
+            try{
+                pin = Integer.parseInt(statement);
+                break;
+            }
+            catch(Exception e){
+                System.out.println("Please answer with a valid number");
+            }
+        }
+        d = new Device(sensorControlled,controller,sensorDataType,criticalPoint,takeActionUp,upperActionBound,takeActionLow,lowerActionBound,pin);
         for(int x = 0;x<devices.length-1;x++){
             if(devices[x] == null){
                 devices[x] = d;
@@ -239,7 +300,19 @@ public class Main
      * 
      */
     private void controlLogic(){
-        
+        int action;
+        for(Device d:devices){
+            action = d.needsAction();
+            if(action == 1){
+                
+            }
+            else if (action == 2){
+                
+            }
+            else if (action == -1){
+                
+            }
+        }
     }
     
     /**
@@ -252,8 +325,8 @@ public class Main
     /**
      * 
      */
-    private void predictEnergyConsumptionAndAction(){
-        
+    private int predictEnergyConsumptionAndAction(){
+        return 0;
     }
     
     /**
