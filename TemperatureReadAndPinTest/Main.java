@@ -30,12 +30,57 @@ public class Main
         sleepTime = 10000;
         System.out.println("Staring Setup");
         Scanner in = new Scanner (System.in);
-        String statement = in.nextLine();
-        System.out.println();
+        String statement;
+        int sensorPromts;
+        while(true){
+            System.out.println("How many sensors will you use? Ex: 2");
+            statement = in.nextLine();
+            try{
+                if(Integer.parseInt(statement) >0){
+                    sensorPromts = Integer.parseInt(statement);
+                    break;
+                }
+            }
+            catch(Exception e){
+                System.out.println("Please answer with a valid number > 0");
+            }
+        }
+        
+        
         //code in promts and file writer
+        for(int x = 0;x<sensorPromts;x++){
+            sensorPrompt(in);
+        }
+        
+        while(true){
+            System.out.println("How often (in minutes) do you want all of the sensors to take a reading? \n (If there are multiple times that you want, pick the smallest time)\n Ex: 2");
+            statement = in.nextLine();
+            try{
+                if(Integer.parseInt(statement) >0){
+                    sleepTime = Integer.parseInt(statement)*60*1000;
+                    break;
+                }
+            }
+            catch(Exception e){
+                System.out.println("Please answer with a valid number > 0");
+            }
+        }
+        
+        while(true){
+            System.out.println("Do you want to add a device to the system? (yes/no)");
+            statement = in.nextLine();
+            if(statement.toLowerCase().equals("yes")){
+                devicePrompt(in);
+            }
+            else if (statement.toLowerCase().equals("no")){
+                break;
+            }
+            else{
+                System.out.println("Please answer with \'yes\' or \'no\'");
+            }
+        }
+        
         System.out.println("Setup complete! Type \'Exit\' and press enter to stop.");
-        sensorPrompt(in);
-        devicePrompt(in);
         while(!exit){
             run();
             try{
