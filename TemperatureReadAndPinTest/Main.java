@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 /**
  * Write a description of class Main here.
  * 
@@ -10,12 +13,16 @@ public class Main
 {
     private int sleepTime;
     private Device[] devices = new Device[30];
+    private boolean[] devicesToCheck = new boolean[30];
     private int numberOfDevices = 0;
     private Sensor[] sensors = new Sensor[30];
     private int numberOfSensors = 0;
     private double systemVoltage;
     private ArrayList<String> data;
+    private ArrayList<String> previousData;
     private String[] preDefinedSensorNames = new String[1];
+    private boolean firstRun = true;
+    private boolean testedActions = false;
 
     /**
      * Constructor for objects of class Main
@@ -27,6 +34,7 @@ public class Main
         //initializing variables
         boolean exit = false;
         data = new ArrayList<String>();
+        previousData = new ArrayList<String>();
         sleepTime = 10000;
         System.out.println("Staring Setup");
         Scanner in = new Scanner (System.in);
@@ -83,12 +91,23 @@ public class Main
         System.out.println("Setup complete! Type \'Exit\' and press enter to stop.");
         while(!exit){
             run();
-            try{
-                Thread.sleep(sleepTime);
+            if(testedActions){
+                try{
+                    Thread.sleep(sleepTime/2);
+                }
+                catch(Exception e){
+                    System.out.println("Sleep Time Failure");
+                    System.out.println(e.getStackTrace());
+                }
             }
-            catch(Exception e){
-                System.out.println("Sleep Time Failure");
-                System.out.println(e.getStackTrace());
+            else{
+                try{
+                    Thread.sleep(sleepTime);
+                }
+                catch(Exception e){
+                    System.out.println("Sleep Time Failure");
+                    System.out.println(e.getStackTrace());
+                }
             }
             if(in.hasNext()){
                 if(in.nextLine().toLowerCase() == "exit"){
@@ -323,7 +342,6 @@ public class Main
     private void run(){
         getSensorData();
         controlLogic();
-        takeAction();
         testActions();
     }
     
@@ -331,13 +349,39 @@ public class Main
      * 
      */
     private void getSensorData(){
+        if(!firstRun){
+            previousData = data;
+            data = new ArrayList<String>();
+        }
+        else{
+            firstRun = false;
+        }
         for(Sensor s:sensors){
             switch(s.getName()){
                 case "dht11":
                         data.add("Humidity:" + s.readData(1));
                         data.add("Temperature:" + s.readData(0));
                         break;
+                //need to add cases for other sensors
             }
+        }
+        try{
+            FileWriter writer;
+            File file = new File("/home/pi/Desktop/SensorData.txt");
+            writer = new FileWriter(file,true);
+            for(String s:data){
+                if(!s.equals("")){
+                    writer.append(s);
+                    writer.append("\n");
+                }
+            }
+            writer.append("\n");
+            writer.flush();
+            writer.close();
+        }
+        catch(IOException e){
+            System.out.println("Data write error");
+            e.printStackTrace();
         }
     }
     
@@ -346,38 +390,75 @@ public class Main
      */
     private void controlLogic(){
         int action;
+        int powerAction = predictEnergyConsumptionAndAction();
+        int deviceNum = 0;
         for(Device d:devices){
             action = d.needsAction();
-            if(action == 1){
-                
+            if(action == 1){//upper action
+                d.turnOn();
+                devicesToCheck[deviceNum] = true;
             }
-            else if (action == 2){
-                
+            else if (action == 2){//lower action
+                d.turnOn();
+                devicesToCheck[deviceNum] = true;
             }
-            else if (action == -1){
-                
+            else if (action == -1){//action determined by power
+                if(powerAction == 1){
+                    d.turnOff();
+                    devicesToCheck[deviceNum] = true;
+                }
+                else{
+                    d.turnOn();
+                    devicesToCheck[deviceNum] = false;
+                }
             }
+            else if (action == 3){
+                d.turnOff();
+                devicesToCheck[deviceNum] = false;
+            }
+            deviceNum++;
         }
     }
     
     /**
-     * 
-     */
-    private void takeAction(){
-        
-    }
-    
-    /**
-     * 
+     * return 0 if ok on power
+     * return 1 if power consumption is too high
      */
     private int predictEnergyConsumptionAndAction(){
         return 0;
     }
     
     /**
-     * 
+     * compares the last data point with a more current one to the critical point
+     * This will warn the user if the current data point is farther than the last data point from the critical point
      */
     private void testActions(){
-        
+        boolean needToTestActions = false;
+        testedActions = false;
+        for(boolean b:devicesToCheck){
+            if(b){
+                needToTestActions = true;
+            }
+        }
+        if(needToTestActions){
+            testedActions = true;
+            try{
+                Thread.sleep(sleepTime/2);
+            }
+            catch(Exception e){
+                System.out.println("Sleep Time Failure");
+                System.out.println(e.getStackTrace());
+            }
+            for(int i = 0;i<devices.length;i++){
+                if(devicesToCheck[i]){
+                    float lastDataPoint = devices[i].lastDataPoint;
+                    float currentDataPoint = devices[i].getNewCurrentDataPoint();
+                    float criticalPoint = devices[i].criticalPoint;
+                    if(Math.abs(criticalPoint-lastDataPoint) > Math.abs(criticalPoint-currentDataPoint)){
+                        System.out.println("The value that device " + i + "on pin " + devices[i].pin + " depends on is farther away from the critical point than the last value: \n last value: " + lastDataPoint + " Current value: " + currentDataPoint + " Critical Point: " + criticalPoint);
+                    }
+                }
+            }
+        }
     }
 }

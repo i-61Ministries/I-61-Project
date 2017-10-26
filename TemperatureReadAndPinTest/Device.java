@@ -1,3 +1,8 @@
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
 
 /**
  * Write a description of class Device here.
@@ -17,8 +22,11 @@ public class Device
     public float lowerActionBound;
     public float criticalPoint;
     public float powerUsage;
+    public float lastDataPoint;
+    public float currentDataPoint;
     public int pin;
-
+    public boolean deviceState = false;
+    final GpioPinDigitalOutput pinOut;
     /**
      * Constructor for objects of class Device
      */
@@ -35,13 +43,13 @@ public class Device
             this.takeActionUp = takeActionUp;
             this.takeActionLow = takeActionLow;
             if(!takeActionUp){
-                //upperActionBound will not be set
+                this.upperActionBound = 0f;
             }
             else{
                 this.upperActionBound = upperActionBound;
             }
             if(!takeActionLow){
-                //lowerActionBound will not be set
+                this.lowerActionBound = 0f;
             }
             else{
                 this.lowerActionBound = lowerActionBound;
@@ -50,6 +58,102 @@ public class Device
         }
         this.powerUsage = powerUsage;
         this.pin = pin;
+        
+        final GpioController gpio = GpioFactory.getInstance();
+
+        switch(pin){
+            case 0:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, PinState.LOW);
+                break;
+            
+            case 1:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, PinState.LOW);
+                break;
+                
+            case 2:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, PinState.LOW);
+                break;
+            
+            case 3:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, PinState.LOW);
+                break;
+            
+            case 4:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_04, PinState.LOW);
+                break;
+            
+            case 5:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_05, PinState.LOW);
+                break;
+            
+            case 6:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_06, PinState.LOW);
+                break;
+            
+            case 7:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_07, PinState.LOW);
+                break;
+            
+            case 8:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_08, PinState.LOW);
+                break;
+            
+            case 9:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_09, PinState.LOW);
+                break;
+            
+            case 10:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_10, PinState.LOW);
+                break;
+            
+            case 11:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_11, PinState.LOW);
+                break;
+            
+            case 12:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_12, PinState.LOW);
+                break;
+            
+            case 13:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_13, PinState.LOW);
+                break;
+            
+            case 14:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_14, PinState.LOW);
+                break;
+            
+            case 15:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_15, PinState.LOW);
+                break;
+            
+            case 16:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_16, PinState.LOW);
+                break;
+            
+            case 17:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_17, PinState.LOW);
+                break;
+            
+            case 18:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_18, PinState.LOW);
+                break;
+            
+            case 19:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_19, PinState.LOW);
+                break;
+            
+            case 20:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_20, PinState.LOW);
+                break;
+            
+            /**case 21:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_21, PinState.LOW);
+                break;
+            
+            case 22:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_22, PinState.LOW);
+                break;
+            
+            case 23:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, PinState.LOW);
+                break;
+            
+            case 24:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_24, PinState.LOW);
+                break;
+            
+            case 25:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_25, PinState.LOW);
+                break;
+            
+            case 26:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_26, PinState.LOW);
+                break;
+            
+            case 27:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27, PinState.LOW);
+                break;
+            
+            case 28:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_28, PinState.LOW);
+                break;
+            
+            case 29:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, PinState.LOW);
+                break;*/
+            default:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, PinState.LOW);
+        }
+        
     }
     
     /**
@@ -57,25 +161,49 @@ public class Device
      * 0 means no action required;
      * 1 means that upper bound was reached and needs action
      * 2 means that lower bound was reached and needs action
+     * 3 means that it is close enough to the critical point to turn off
      */
     public int needsAction(){
-        float data;
         if(sensorControlled){
-            data =controller.readData(sensorDataType);
+            lastDataPoint = currentDataPoint;
+            currentDataPoint =controller.readData(sensorDataType);
             if(takeActionUp){
-                if(data>=upperActionBound){
+                if(currentDataPoint>=upperActionBound){
                     return 1;
                 }
             }
             else if(takeActionLow){
-                if(data<=lowerActionBound){
+                if(currentDataPoint<=lowerActionBound){
                     return 2;
                 }
             }
             else{
-                return 0;
+                if((criticalPoint<currentDataPoint && currentDataPoint<((criticalPoint+upperActionBound)/2)) || (criticalPoint>currentDataPoint && currentDataPoint>((criticalPoint+lowerActionBound)/2))){
+                    return 3;
+                }
+                else{
+                    return 0;
+                }
             }
         }
         return -1;
+    }
+    
+    public boolean deviceState(){
+        return deviceState;
+    }
+    
+    public void turnOn(){
+        pinOut.high();
+    }
+    
+    public void turnOff(){
+        pinOut.low();
+    }
+    
+    public float getNewCurrentDataPoint(){
+        lastDataPoint = currentDataPoint;
+        currentDataPoint =controller.readData(sensorDataType);
+        return currentDataPoint;
     }
 }
