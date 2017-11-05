@@ -357,12 +357,17 @@ public class Main
             firstRun = false;
         }
         for(Sensor s:sensors){
-            switch(s.getName()){
-                case "dht11":
+            if(s != null){
+                switch(s.getName()){
+                    case "dht11":
                         data.add("Humidity:" + s.readData(1));
                         data.add("Temperature:" + s.readData(0));
                         break;
-                //need to add cases for other sensors
+                        //need to add cases for other sensors
+                    }
+                }
+            else{
+                break;
             }
         }
         try{
@@ -393,30 +398,35 @@ public class Main
         int powerAction = predictEnergyConsumptionAndAction();
         int deviceNum = 0;
         for(Device d:devices){
-            action = d.needsAction();
-            if(action == 1){//upper action
-                d.turnOn();
-                devicesToCheck[deviceNum] = true;
-            }
-            else if (action == 2){//lower action
-                d.turnOn();
-                devicesToCheck[deviceNum] = true;
-            }
-            else if (action == -1){//action determined by power
-                if(powerAction == 1){
-                    d.turnOff();
+            if(d!=null){
+                action = d.needsAction();
+                if(action == 1){//upper action
+                    d.turnOn();
                     devicesToCheck[deviceNum] = true;
                 }
-                else{
+                else if (action == 2){//lower action
                     d.turnOn();
+                    devicesToCheck[deviceNum] = true;
+                }
+                else if (action == -1){//action determined by power
+                    if(powerAction == 1){
+                        d.turnOff();
+                        devicesToCheck[deviceNum] = true;
+                    }
+                    else{
+                        d.turnOn();
+                        devicesToCheck[deviceNum] = false;
+                    }
+                }
+                else if (action == 3){
+                    d.turnOff();
                     devicesToCheck[deviceNum] = false;
                 }
+                deviceNum++;
             }
-            else if (action == 3){
-                d.turnOff();
-                devicesToCheck[deviceNum] = false;
+            else{
+                break;
             }
-            deviceNum++;
         }
     }
     

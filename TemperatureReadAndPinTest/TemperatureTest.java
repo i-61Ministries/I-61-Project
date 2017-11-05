@@ -61,9 +61,14 @@ public class TemperatureTest extends Sensor
     }
     
     public void getTemp() throws Exception{
+        int timesRun = 0;
         while(!getTemperature(pin)){
             Thread.sleep(2000);
-            //dht.getTemperature(21);
+            timesRun++;
+            if(timesRun>20){
+                System.out.println("A dht11 sensor on pin "+ pin +" failed to get a reading and may be malfunctioning");
+                break;
+            }
         }
     }
     
@@ -124,7 +129,7 @@ public class TemperatureTest extends Sensor
                 c = -c;
             }
             final float f = c * 1.8f + 32;
-            System.out.println("Humidity = " + h + " Temperature = " + c + "(" + f + "f)");
+            //System.out.println("Humidity = " + h + " Temperature = " + c + "(" + f + "f)");
             humidity = h;
             temperature = f;
             return true;
@@ -165,7 +170,7 @@ public class TemperatureTest extends Sensor
             getTemp();
         }
         catch(Exception e){
-            System.out.println("Read Data Error");
+            System.out.println("Read Data Error for sensor on pin " + pin);
             System.out.println(e.getStackTrace());
         }
 
