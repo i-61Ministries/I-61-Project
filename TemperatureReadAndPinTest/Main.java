@@ -3,6 +3,28 @@ import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPin;
+import com.pi4j.io.gpio.GpioPinDigitalInput;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinDirection;
+import com.pi4j.io.gpio.PinMode;
+import com.pi4j.io.gpio.PinPullResistance;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.trigger.GpioCallbackTrigger;
+import com.pi4j.io.gpio.trigger.GpioPulseStateTrigger;
+import com.pi4j.io.gpio.trigger.GpioSetStateTrigger;
+import com.pi4j.io.gpio.trigger.GpioSyncStateTrigger;
+import com.pi4j.io.gpio.event.GpioPinListener;
+import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
+import com.pi4j.io.gpio.event.GpioPinEvent;
+import com.pi4j.io.gpio.event.GpioPinListenerDigital;
+import com.pi4j.io.gpio.event.PinEventType;
+import com.pi4j.wiringpi.Gpio;
+import com.pi4j.wiringpi.GpioUtil;
 /**
  * Write a description of class Main here.
  * 
@@ -29,6 +51,14 @@ public class Main
      * Promts user for variables, writes them to a file, and then runs everything else
      */
     public Main(String[] args){
+        // setup wiringPi
+        if (Gpio.wiringPiSetup() == -1) {
+            System.out.println(" ==>> GPIO SETUP FAILED");
+            return;
+        }
+
+        GpioUtil.export(3, GpioUtil.DIRECTION_OUT);
+        
         //setting up pre-defined sensor names
         preDefinedSensorNames[0] = "dht11";
         //initializing variables
@@ -88,7 +118,7 @@ public class Main
             }
         }
         
-        System.out.println("Setup complete! Type \'Exit\' and press enter to stop.");
+        System.out.println("Setup complete!");
         while(!exit){
             run();
             if(testedActions){
@@ -109,11 +139,11 @@ public class Main
                     System.out.println(e.getStackTrace());
                 }
             }
-            if(in.hasNext()){
+            /**if(in.hasNext()){
                 if(in.nextLine().toLowerCase() == "exit"){
                     exit=true;
                 }
-            }
+            }*/
           }
     }
     
@@ -155,7 +185,7 @@ public class Main
                         break;
                 }
                 if(!notASensor){
-                    break;
+                    System.out.println("Please answer with a vaild integer");
                 }
             }
             catch(Exception e){
@@ -234,6 +264,7 @@ public class Main
                             takeActionUp=true;
                             while(true){
                                 System.out.println("What is the value? EX: 74.3");
+                                statement = in.nextLine();
                                 try{
                                     upperActionBound = Float.parseFloat(statement);
                                     break;
@@ -259,6 +290,7 @@ public class Main
                             takeActionLow=true;
                             while(true){
                                 System.out.println("What is the value? EX: 73.2");
+                                statement = in.nextLine();
                                 try{
                                     lowerActionBound = Float.parseFloat(statement);/**could search to see if there iss a decimal and if not add it myself*/
                                     break;
@@ -281,7 +313,7 @@ public class Main
                         System.out.println("What sensor value is best for the device to turn off at? \n EX: An air conditioner set to turn off when a room cools to 75.0 degrees farenheight");
                         statement = in.nextLine();
                         try{
-                            criticalPoint = Float.parseFloat(statement);/**could search to see if there is a decimal and if not add it myself*/
+                            criticalPoint = Float.parseFloat(statement);
                             break;
                         }
                         catch(Exception e){
@@ -302,7 +334,7 @@ public class Main
             System.out.println("How much power does the device use in Amps/Hour? EX: 3.1");
             statement = in.nextLine();
             try{
-                powerUsage = Float.parseFloat(statement);/**could search to see if there is a decimal and if not add it myself*/
+                powerUsage = Float.parseFloat(statement);
                 break;
             }
             catch(Exception e){

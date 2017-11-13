@@ -125,7 +125,7 @@ public class Device
             case 20:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_20, PinState.LOW);
                 break;
             
-            /**case 21:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_21, PinState.LOW);
+            case 21:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_21, PinState.LOW);
                 break;
             
             case 22:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_22, PinState.LOW);
@@ -150,7 +150,7 @@ public class Device
                 break;
             
             case 29:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, PinState.LOW);
-                break;*/
+                break;
             default:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, PinState.LOW);
         }
         

@@ -51,13 +51,14 @@ public class TemperatureTest extends Sensor
         this.types = types;
         this.typesName = typesName;
         this.pin = pin;
+        /**
         // setup wiringPi
         if (Gpio.wiringPiSetup() == -1) {
             System.out.println(" ==>> GPIO SETUP FAILED");
             return;
         }
 
-        GpioUtil.export(3, GpioUtil.DIRECTION_OUT);
+        GpioUtil.export(3, GpioUtil.DIRECTION_OUT);*/
     }
     
     public void getTemp() throws Exception{
