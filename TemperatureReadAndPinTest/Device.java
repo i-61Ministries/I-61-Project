@@ -27,12 +27,14 @@ public class Device
     public int pin;
     public boolean deviceState = false;
     final GpioPinDigitalOutput pinOut;
+    final GpioController gpio;
     /**
      * Constructor for objects of class Device
      */
-    public Device(boolean sensorControlled, Sensor controller, int sensorDataType, float criticalPoint,boolean takeActionUp, float upperActionBound, boolean takeActionLow, float lowerActionBound, int pin)
+    public Device(boolean sensorControlled, Sensor controller, int sensorDataType, float criticalPoint,boolean takeActionUp, float upperActionBound, boolean takeActionLow, float lowerActionBound, int pin, GpioController gpio)
     {
         this.sensorControlled = sensorControlled;
+        this.gpio = gpio;
         if(!sensorControlled){
             this.controller = null;
             //sensorData type, takeActionUp, takeActionLow, upperActionBound, lowerActionBound, and criticalPoint will not be set
@@ -58,8 +60,6 @@ public class Device
         }
         this.powerUsage = powerUsage;
         this.pin = pin;
-        
-        final GpioController gpio = GpioFactory.getInstance();
 
         switch(pin){
             case 0:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, PinState.LOW);
@@ -172,19 +172,24 @@ public class Device
                     return 1;
                 }
             }
-            else if(takeActionLow){
+            if(takeActionLow){
                 if(currentDataPoint<=lowerActionBound){
                     return 2;
                 }
             }
-            else{
-                if((criticalPoint<currentDataPoint && currentDataPoint<((criticalPoint+upperActionBound)/2)) || (criticalPoint>currentDataPoint && currentDataPoint>((criticalPoint+lowerActionBound)/2))){
-                    return 3;
-                }
-                else{
-                    return 0;
-                }
+            if((criticalPoint<currentDataPoint && currentDataPoint<((criticalPoint+upperActionBound)/2)) || (criticalPoint>currentDataPoint && currentDataPoint>((criticalPoint+lowerActionBound)/2))){
+                return 3;
             }
+            else if(!takeActionLow && currentDataPoint<criticalPoint){
+                return 3;
+            }
+            else if(!takeActionUp && currentDataPoint>criticalPoint){
+                return 3;
+            }
+            else{
+                return 0;
+            }
+            
         }
         return -1;
     }

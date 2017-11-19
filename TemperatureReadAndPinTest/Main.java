@@ -45,19 +45,21 @@ public class Main
     private String[] preDefinedSensorNames = new String[1];
     private boolean firstRun = true;
     private boolean testedActions = false;
+    final GpioController gpio = GpioFactory.getInstance();
 
     /**
      * Constructor for objects of class Main
      * Promts user for variables, writes them to a file, and then runs everything else
      */
     public Main(String[] args){
+        /**
         // setup wiringPi
         if (Gpio.wiringPiSetup() == -1) {
             System.out.println(" ==>> GPIO SETUP FAILED");
             return;
         }
 
-        GpioUtil.export(3, GpioUtil.DIRECTION_OUT);
+        GpioUtil.export(3, GpioUtil.DIRECTION_OUT);*/
         
         //setting up pre-defined sensor names
         preDefinedSensorNames[0] = "dht11";
@@ -184,8 +186,11 @@ public class Main
                         notASensor=true;
                         break;
                 }
-                if(!notASensor){
+                if(notASensor){
                     System.out.println("Please answer with a vaild integer");
+                }
+                else{
+                    break;
                 }
             }
             catch(Exception e){
@@ -352,7 +357,7 @@ public class Main
                 System.out.println("Please answer with a valid number");
             }
         }
-        d = new Device(sensorControlled,controller,sensorDataType,criticalPoint,takeActionUp,upperActionBound,takeActionLow,lowerActionBound,pin);
+        d = new Device(sensorControlled,controller,sensorDataType,criticalPoint,takeActionUp,upperActionBound,takeActionLow,lowerActionBound,pin,gpio);
         for(int x = 0;x<devices.length-1;x++){
             if(devices[x] == null){
                 devices[x] = d;
@@ -409,6 +414,7 @@ public class Main
             for(String s:data){
                 if(!s.equals("")){
                     writer.append(s);
+                    System.out.println(s);
                     writer.append("\n");
                 }
             }

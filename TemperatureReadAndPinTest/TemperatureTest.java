@@ -175,7 +175,7 @@ public class TemperatureTest extends Sensor
             System.out.println(e.getStackTrace());
         }
 
-        if(type==1){
+        if(type==0){
             return humidity;
         }
         else{
