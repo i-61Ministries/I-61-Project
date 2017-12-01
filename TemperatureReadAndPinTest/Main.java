@@ -243,10 +243,15 @@ public class Main
                     controller = sensors[Integer.parseInt(statement)];
                     while(controller.types.length>1){
                         System.out.println("What data type will the device use?");
-                        for(int x = 0;x<controller.types.length;x++){
+                        /**for(int x = 0;x<controller.types.length;x++){
                             if(sensors[x] != null){
                                 System.out.println(x + ":" + controller.typesName[x]);
                             }
+                        }*/
+                        int x = 0;
+                        for(String s:controller.typesName){
+                            System.out.println(x + ":" + s);
+                            x++;
                         }
                         statement = in.nextLine();
                         try{
@@ -397,8 +402,8 @@ public class Main
             if(s != null){
                 switch(s.getName()){
                     case "dht11":
-                        data.add("Humidity:" + s.readData(1));
-                        data.add("Temperature:" + s.readData(0));
+                        data.add("Humidity:" + s.readData(0));
+                        data.add("Temperature:" + s.readData(1));
                         break;
                         //need to add cases for other sensors
                     }
