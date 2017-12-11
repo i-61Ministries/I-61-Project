@@ -28,7 +28,7 @@ import com.pi4j.wiringpi.GpioUtil;
  */
 public class VoltageSensor extends Sensor
 {
-    private float voltage
+    private float voltage;
     
     public String name;
     public float upperBound;//Sensor's physical capibilities
@@ -75,18 +75,17 @@ public class VoltageSensor extends Sensor
         Serial.println (calcVoltageVal); //print out voltage readings.
         delay (1000);*/
 
-        int voltageVal;
-        int calcVoltageVal;
-        int LED1 = 13;
+        float voltageVal;
+        float calcVoltageVal;
  
 
-        pinMode (LED1, OUTPUT);
+        Gpio.pinMode (LED1, Gpio.INPUT);
 
 
         float temp;
-        voltageVal = analogRead (0); //read the value from voltage sensor.
+        voltageVal = analogRead (pin); //read the value from voltage sensor.
         temp = voltageVal/4.092; //resolution value to store
-        voltageVal = (int) temp ;
+        voltageVal = temp ;
         calcVoltageVal = ((voltageVal% 100) / 10); //calculate stepped down voltage
         Serial.println ("Voltage: ");
         Serial.println (calcVoltageVal); //print out voltage readings.
