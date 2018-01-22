@@ -113,18 +113,7 @@ public class Device
             case 16:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_16, PinState.LOW);
                 break;
             
-            case 17:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_17, PinState.LOW);
-                break;
-            
-            case 18:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_18, PinState.LOW);
-                break;
-            
-            case 19:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_19, PinState.LOW);
-                break;
-            
-            case 20:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_20, PinState.LOW);
-                break;
-            
+            /**
             case 21:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_21, PinState.LOW);
                 break;
             
@@ -151,6 +140,14 @@ public class Device
             
             case 29:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, PinState.LOW);
                 break;
+                
+            case 30:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_30, PinState.LOW);
+                break;
+                
+            case 31:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_31, PinState.LOW);
+                break;
+                */
+                
             default:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, PinState.LOW);
         }
         
