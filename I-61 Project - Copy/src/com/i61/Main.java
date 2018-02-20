@@ -28,6 +28,7 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.pi4j.io.gpio.event.PinEventType;
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.GpioUtil;
+
 /**
  * Write a description of class Main here.
  * https://askubuntu.com/questions/101746/how-can-i-execute-a-jar-file-from-the-terminal
@@ -37,6 +38,7 @@ import com.pi4j.wiringpi.GpioUtil;
 public class Main
 {
     private static int sleepTime = 10000;
+    private static int baseSleepTime = 10000;
     private static Device[] devices = new Device[30];
     private static boolean[] devicesToCheck = new boolean[30];
     private static int numberOfDevices = 0;
@@ -52,10 +54,15 @@ public class Main
     private static boolean firstRun = true;
     private static boolean testedActions = false;
     ///
-    static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    private static Date time;
+    private static boolean timeToTurnOnDevice;/////
+    private static boolean timeToTurnOffDevice;/////
+    private static ArrayList<Device> deviceToTurnOnTime = new ArrayList<Device>(20);/////
+    private static ArrayList<Device> deviceToTurnOffTime = new ArrayList<Device>(20);/////
     ///
 
-    //static final GpioController gpio = GpioFactory.getInstance();
+    static final GpioController gpio = GpioFactory.getInstance();
 
     /**
      * Constructor for objects of class Main
@@ -83,7 +90,7 @@ public class Main
         Scanner in = new Scanner (System.in);
         String statement;
         int sensorPromts;
-        Date time = new Date(System.currentTimeMillis());
+        time = new Date(System.currentTimeMillis());
         System.out.println("This is the current System Time: " +sdf.format(time) + "\n if this is not your current time correct it in your system settings");
         while(true){
             System.out.println("How many sensors will you use? Ex: 2");
@@ -111,6 +118,7 @@ public class Main
             try{
                 if(Integer.parseInt(statement) >0){
                     sleepTime = Integer.parseInt(statement)*60*1000;
+                    baseSleepTime = sleepTime;
                     break;
                 }
             }
@@ -134,15 +142,28 @@ public class Main
         }
         
         System.out.println("Setup complete!");
+
+
         while(!exit){
             run();
-            if(testedActions){
+            if(testedActions){/////
                 try{
-                    Thread.sleep(sleepTime/2);
+                    Thread.sleep(sleepTime);
                 }
                 catch(Exception e){
                     System.out.println("Sleep Time Failure");
                     System.out.println(e.getStackTrace());
+                }
+
+                for(int i = 0;i<devices.length;i++){
+                    if(devicesToCheck[i]){
+                        float lastDataPoint = devices[i].lastDataPoint;
+                        float currentDataPoint = devices[i].getNewCurrentDataPoint();
+                        float criticalPoint = devices[i].criticalPoint;
+                        if(Math.abs(criticalPoint-lastDataPoint) > Math.abs(criticalPoint-currentDataPoint)){
+                            System.out.println("The value that device " + i + "on pin " + devices[i].pin + " depends on is farther away from the critical point than the last value: \n last value: " + lastDataPoint + " Current value: " + currentDataPoint + " Critical Point: " + criticalPoint);
+                        }
+                    }
                 }
             }
             else{
@@ -154,14 +175,69 @@ public class Main
                     System.out.println(e.getStackTrace());
                 }
             }
+
+            if(timeToTurnOnDevice){
+                for(Device d:deviceToTurnOnTime){
+                    d.turnOn();
+                }
+            }
+            if (timeToTurnOffDevice){
+                for(Device d:deviceToTurnOffTime){
+                    d.turnOff();
+                }
+            }
+
+            getNextSleepTime();
+
+
             /**if(in.hasNext()){
                 if(in.nextLine().toLowerCase() == "exit"){
                     exit=true;
                 }
             }*/
           }
+
+
     }
-    
+
+    private static void getNextSleepTime(){
+        /////
+        time = new Date(System.currentTimeMillis());
+        String currentTime = sdf.format(time);
+        String[] currentHourAndMinutes = currentTime.split(":");
+        int currentHour = Integer.parseInt(currentHourAndMinutes[0]) *60*60*1000;
+        int currentMinute = Integer.parseInt(currentHourAndMinutes[1]) *60*1000;
+        int theTime = currentHour + currentMinute;
+        int closestTime = -1;
+        for(Device d:devices){
+            if(d.timeControl){
+                for(String s:d.times){
+                    String[] hoursAndMinutes = s.split(":");
+                    int timeAway = (Integer.parseInt(hoursAndMinutes[0])*60*60*1000) + (Integer.parseInt(hoursAndMinutes[1])*60*1000) - theTime;
+                    if(timeAway < baseSleepTime && timeAway >=0){
+                        if(closestTime == -1){
+                            closestTime = timeAway;
+                            deviceToTurnOnTime.add(d);
+                        }
+                        else if(timeAway <= closestTime){
+                            closestTime = timeAway;
+                            deviceToTurnOnTime.add(d);
+                        }
+                    }
+                }
+            }
+            if(closestTime == -1){
+                sleepTime = baseSleepTime;
+                timeToTurnOnDevice = false;
+                deviceToTurnOnTime.clear();
+            }
+            else{
+                sleepTime = closestTime;
+            }
+        }
+
+    }
+
     private static void sensorPrompt(Scanner in){
         String statement;
         while(true){
@@ -224,8 +300,8 @@ public class Main
         boolean takeActionUp = false;
         boolean takeActionLow = false;
         boolean timeControl = false; ///
-        String[] times;///
-        String onFor;///
+        String[] times = new String[0];///
+        String onFor = "";///
         float upperActionBound = 0.0f;
         float lowerActionBound = 0.0f;
         float criticalPoint = 0.0f;
@@ -434,13 +510,15 @@ public class Main
                 System.out.println("Please answer with a valid number");
             }
         }
-        /**d = new Device(sensorControlled,controller,sensorDataType,criticalPoint,takeActionUp,upperActionBound,takeActionLow,lowerActionBound,pin,gpio);
+        //**
+        d = new Device(sensorControlled,controller,sensorDataType,criticalPoint,takeActionUp,upperActionBound,takeActionLow,lowerActionBound,pin,gpio, timeControl, times, onFor);
         for(int x = 0;x<devices.length-1;x++){
             if(devices[x] == null){
                 devices[x] = d;
                 break;
             }
-        }*/
+        }
+        //*/
     }
     
     /**
@@ -557,7 +635,7 @@ public class Main
      * compares the last data point with a more current one to the critical point
      * This will warn the user if the current data point is farther than the last data point from the critical point
      */
-    private static void testActions(){
+    private static void testActions(){/////
         boolean needToTestActions = false;
         testedActions = false;
         for(boolean b:devicesToCheck){
@@ -567,23 +645,6 @@ public class Main
         }
         if(needToTestActions){
             testedActions = true;
-            try{
-                Thread.sleep(sleepTime/2);
-            }
-            catch(Exception e){
-                System.out.println("Sleep Time Failure");
-                System.out.println(e.getStackTrace());
-            }
-            for(int i = 0;i<devices.length;i++){
-                if(devicesToCheck[i]){
-                    float lastDataPoint = devices[i].lastDataPoint;
-                    float currentDataPoint = devices[i].getNewCurrentDataPoint();
-                    float criticalPoint = devices[i].criticalPoint;
-                    if(Math.abs(criticalPoint-lastDataPoint) > Math.abs(criticalPoint-currentDataPoint)){
-                        System.out.println("The value that device " + i + "on pin " + devices[i].pin + " depends on is farther away from the critical point than the last value: \n last value: " + lastDataPoint + " Current value: " + currentDataPoint + " Critical Point: " + criticalPoint);
-                    }
-                }
-            }
         }
     }
 }

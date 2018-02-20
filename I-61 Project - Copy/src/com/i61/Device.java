@@ -29,18 +29,23 @@ public class Device
     public boolean deviceState = false;
     final GpioPinDigitalOutput pinOut;
     final GpioController gpio;
+
+    boolean timeControl; ///
+    String[] times;///
+    String onFor;///
     /**
      * Constructor for objects of class Device
      */
-    public Device(boolean sensorControlled, Sensor controller, int sensorDataType, float criticalPoint,boolean takeActionUp, float upperActionBound, boolean takeActionLow, float lowerActionBound, int pin, GpioController gpio)
+    public Device(boolean sensorControlled, Sensor controller, int sensorDataType, float criticalPoint,boolean takeActionUp, float upperActionBound, boolean takeActionLow, float lowerActionBound, int pin, GpioController gpio, boolean timeControl, String[] times, String onFor)
     {
         this.sensorControlled = sensorControlled;
+        this.timeControl = timeControl;
         this.gpio = gpio;
         if(!sensorControlled){
             this.controller = null;
             //sensorData type, takeActionUp, takeActionLow, upperActionBound, lowerActionBound, and criticalPoint will not be set
         }
-        else{
+        else if(sensorControlled){
             this.controller = controller;
             this.criticalPoint = criticalPoint;
             this.takeActionUp = takeActionUp;
@@ -58,6 +63,10 @@ public class Device
                 this.lowerActionBound = lowerActionBound;
             }
             this.sensorDataType = sensorDataType;
+        }
+        else if(timeControl){
+            this.times = times;
+            this.onFor = onFor;
         }
         this.powerUsage = powerUsage;
         this.pin = pin;
@@ -155,7 +164,7 @@ public class Device
     }
     
     /**
-     * -1 means power controlled
+     * -1 means power or time controlled
      * 0 means no action required;
      * 1 means that upper bound was reached and needs action
      * 2 means that lower bound was reached and needs action
