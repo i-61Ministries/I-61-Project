@@ -3,10 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/I_61_Project_jar</output-path>
     <root id="archive" name="I-61 Project.jar">
       <element id="module-output" name="I-61 Project" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../userlib/pi4j-core.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../userlib/pi4j-device.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../userlib/pi4j-service.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../userlib/pi4j-gpio-extension.jar" path-in-jar="/" />
+      <element id="library" level="project" name="userlib" />
     </root>
   </artifact>
 </component>
