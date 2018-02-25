@@ -78,7 +78,7 @@ public class Main
 
         GpioUtil.export(3, GpioUtil.DIRECTION_OUT);*/
 
-        
+
         //setting up pre-defined sensor names
         //preDefinedSensorNames[0] = "dht11";
         //initializing variables
@@ -105,13 +105,13 @@ public class Main
                 System.out.println("Please answer with a valid number > 0");
             }
         }
-        
-        
-        //code in promts and file writer
+
+
+        //code in prompts and file writer
         for(int x = 0;x<sensorPromts;x++){
             sensorPrompt(in);
         }
-        
+
         while(true){
             System.out.println("How often (in minutes) do you want all of the sensors to take a reading? \n (If there are multiple times that you want, pick the smallest time)\n Ex: 2");
             statement = in.nextLine();
@@ -126,7 +126,7 @@ public class Main
                 System.out.println("Please answer with a valid number > 0");
             }
         }
-        
+
         while(true){
             System.out.println("Do you want to add a device to the system? (yes/no)");
             statement = in.nextLine();
@@ -140,12 +140,18 @@ public class Main
                 System.out.println("Please answer with \'yes\' or \'no\'");
             }
         }
-        
+
         System.out.println("Setup complete!");
 
-
+        int timeHold = 0;
+        boolean heldTime = false;
         while(!exit){
             run();
+            if(sleepTime>baseSleepTime){
+                timeHold = sleepTime - baseSleepTime;
+                sleepTime = sleepTime - timeHold;
+                heldTime = true;
+            }
             if(testedActions){/////
                 try{
                     Thread.sleep(sleepTime);
@@ -176,18 +182,24 @@ public class Main
                 }
             }
 
-            if(timeToTurnOnDevice){
-                for(Device d:deviceToTurnOnTime){
-                    d.turnOn();
+            if(!heldTime) {
+                if (timeToTurnOnDevice) {
+                    for (Device d : deviceToTurnOnTime) {
+                        d.turnOn();
+                    }
                 }
-            }
-            if (timeToTurnOffDevice){
-                for(Device d:deviceToTurnOffTime){
-                    d.turnOff();
+                if (timeToTurnOffDevice) {
+                    for (Device d : deviceToTurnOffTime) {
+                        d.turnOff();
+                    }
                 }
-            }
 
-            getNextSleepTime();
+                getNextSleepTime();
+            }
+            else {
+                sleepTime = timeHold;
+                heldTime = false;
+            }
 
 
             /**if(in.hasNext()){
@@ -218,11 +230,42 @@ public class Main
                         if(closestTime == -1){
                             closestTime = timeAway;
                             deviceToTurnOnTime.add(d);
+                            timeToTurnOnDevice = true;
                         }
-                        else if(timeAway <= closestTime){
+                        else if(timeAway < closestTime){
                             closestTime = timeAway;
                             deviceToTurnOnTime.add(d);
+                            timeToTurnOnDevice = true;
+                            deviceToTurnOffTime.clear();
+                            timeToTurnOffDevice = false;
                         }
+                        else if(timeAway == closestTime){
+                            closestTime = timeAway;
+                            deviceToTurnOnTime.add(d);
+                            timeToTurnOnDevice = true;
+                        }
+                    }
+                }
+                if(d.deviceState()){
+                    /////
+                    String[] dOnFor = d.onFor.split(":");
+                    int dTimeAway = (Integer.parseInt(dOnFor[0])*60*60*1000) + (Integer.parseInt(dOnFor[1])*60*1000);
+                    if(closestTime == -1){
+                        closestTime = dTimeAway;
+                        deviceToTurnOffTime.add(d);
+                        timeToTurnOffDevice = true;
+                    }
+                    else if(closestTime>dTimeAway /**&& baseSleepTime>dTimeAway need to store how much time has passed*/){
+                        closestTime = dTimeAway;
+                        deviceToTurnOffTime.add(d);
+                        timeToTurnOffDevice = true;
+                        deviceToTurnOnTime.clear();
+                        timeToTurnOnDevice = false;
+                    }
+                    else if (closestTime == dTimeAway){
+                        closestTime = dTimeAway;
+                        deviceToTurnOffTime.add(d);
+                        timeToTurnOffDevice = true;
                     }
                 }
             }
@@ -532,7 +575,7 @@ public class Main
      * 
      */
     private static void run(){
-        //getSensorData();
+        getSensorData();
         controlLogic();
         testActions();
     }
@@ -552,8 +595,8 @@ public class Main
             if(s != null){
                 switch(s.getName()){
                     case "dht11":
-                        //data.add("Humidity:" + s.readData(0));
-                        //data.add("Temperature:" + s.readData(1));
+                        data.add("Humidity:" + s.readData(0));
+                        data.add("Temperature:" + s.readData(1));
                         break;
                         //need to add cases for other sensors
                     }

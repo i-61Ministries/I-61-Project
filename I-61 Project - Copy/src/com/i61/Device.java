@@ -26,7 +26,7 @@ public class Device
     public float lastDataPoint;
     public float currentDataPoint;
     public int pin;
-    public boolean deviceState = false;
+    private boolean deviceState = false;
     final GpioPinDigitalOutput pinOut;
     final GpioController gpio;
 
@@ -207,10 +207,12 @@ public class Device
     
     public void turnOn(){
         pinOut.high();
+        deviceState = true;
     }
     
     public void turnOff(){
         pinOut.low();
+        deviceState = false;
     }
     
     public float getNewCurrentDataPoint(){
