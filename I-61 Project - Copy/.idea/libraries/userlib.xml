@@ -1,10 +1,13 @@
 <component name="libraryTable">
   <library name="userlib">
     <CLASSES>
-      <root url="file://$USER_HOME$/IdeaProjects/userlib" />
+      <root url="file://$PROJECT_DIR$/../pi4j lib" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
-    <jarDirectory url="file://$USER_HOME$/IdeaProjects/userlib" recursive="false" />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../pi4j lib" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/../pi4j lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../pi4j lib" recursive="false" type="SOURCES" />
   </library>
 </component>

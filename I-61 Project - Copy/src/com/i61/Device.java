@@ -64,7 +64,7 @@ public class Device
             }
             this.sensorDataType = sensorDataType;
         }
-        else if(timeControl){
+        if(timeControl){
             this.times = times;
             this.onFor = onFor;
         }
@@ -123,7 +123,7 @@ public class Device
             case 16:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_16, PinState.LOW);
                 break;
             
-            /**
+            //**
             case 21:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_21, PinState.LOW);
                 break;
             
@@ -156,7 +156,7 @@ public class Device
                 
             case 31:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_31, PinState.LOW);
                 break;
-                */
+                //*/
                 
             default:pinOut = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, PinState.LOW);
         }

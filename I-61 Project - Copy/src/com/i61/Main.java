@@ -1,11 +1,9 @@
 package com.i61;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
@@ -83,61 +81,120 @@ public class Main
         //preDefinedSensorNames[0] = "dht11";
         //initializing variables
         boolean exit = false;
+        boolean readConfig = false;
         //data = new ArrayList<String>();
         //previousData = new ArrayList<String>();
         //sleepTime = 10000;
         System.out.println("Staring Setup");
-        Scanner in = new Scanner (System.in);
-        String statement;
-        int sensorPromts;
-        time = new Date(System.currentTimeMillis());
-        System.out.println("This is the current System Time: " +sdf.format(time) + "\n if this is not your current time correct it in your system settings");
-        while(true){
-            System.out.println("How many sensors will you use? Ex: 2");
-            statement = in.nextLine();
-            try{
-                if(Integer.parseInt(statement) >0){
-                    sensorPromts = Integer.parseInt(statement);
-                    break;
+        try{
+            File file = new File("/home/pi/Desktop/i-61-config/i-61 config.csv");
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            for(int i = 0; i<6;i++){
+                reader.readLine();
+            }///////
+            //setting up sensors
+            for(int k = 0; k<2;k++){
+                String[] input = reader.readLine().split(",");
+                switch(input[0]) {
+                    case "0":
+                        int[] typeAry = {0, 1};
+                        String[] typeNameAry = {"Humidity", "Temperature"};
+                        sensors[numberOfSensors] = new TemperatureTest(32.0f, 122.0f, typeAry, typeNameAry, Integer.parseInt(input[1]));
+                        numberOfSensors++;
+                        break;
+                    case "1":
+                        break;
+                    default:
+                        break;
                 }
             }
-            catch(Exception e){
-                System.out.println("Please answer with a valid number > 0");
-            }
-        }
+            //sleep time
+            String in =reader.readLine();
+            sleepTime = Integer.parseInt(in)*60*1000;
+            baseSleepTime = sleepTime;
+            //setting up devices
+            for(int x = 0; x<3;x++){
+                String[] input = reader.readLine().split(",");
+                if(input[0].equals("true")) {
+                    boolean sensorControlled = input[1].equals(true);
+                    Sensor controller = sensors[Integer.parseInt(input[2])];
+                    int sensorDataType = Integer.parseInt(input[3]);
+                    float criticalPoint = Float.parseFloat(input[4]);
+                    boolean takeActionUp = input[5].equals("true");
+                    float upperActionBound = Float.parseFloat(input[6]);
+                    boolean takeActionLow = input[7].equals("true");
+                    float lowerActionBound = Float.parseFloat(input[8]);
+                    int pin = Integer.parseInt(input[9]);
+                    boolean timeControl = input[10].equals("true");
+                    String[] times = input[11].split(";");
+                    String onFor = input[12];
 
+                    float powerUsage = 0.0f;
 
-        //code in prompts and file writer
-        for(int x = 0;x<sensorPromts;x++){
-            sensorPrompt(in);
-        }
-
-        while(true){
-            System.out.println("How often (in minutes) do you want all of the sensors to take a reading? \n (If there are multiple times that you want, pick the smallest time)\n Ex: 2");
-            statement = in.nextLine();
-            try{
-                if(Integer.parseInt(statement) >0){
-                    sleepTime = Integer.parseInt(statement)*60*1000;
-                    baseSleepTime = sleepTime;
-                    break;
+                    Device d = new Device(sensorControlled, controller, sensorDataType, criticalPoint, takeActionUp, upperActionBound, takeActionLow, lowerActionBound, pin, gpio, timeControl, times, onFor);
+                    for (int z = 0; z < devices.length - 1; x++) {
+                        if (devices[z] == null) {
+                            devices[z] = d;
+                            break;
+                        }
+                    }
                 }
             }
-            catch(Exception e){
-                System.out.println("Please answer with a valid number > 0");
-            }
+            readConfig = true;
         }
+        catch (Exception e){
+            System.out.println("Setup from config file failed. Please check file or complete the following prompts");
+            e.toString();
+        }
+        if(!readConfig) {
+            Scanner in = new Scanner(System.in);
+            String statement;
+            int sensorPromts;
+            time = new Date(System.currentTimeMillis());
+            System.out.println("This is the current System Time: " + sdf.format(time) + "\n if this is not your current time correct it in your system settings");
+            while (true) {
+                System.out.println("How many sensors will you use? Ex: 2");
+                statement = in.nextLine();
+                try {
+                    if (Integer.parseInt(statement) > 0) {
+                        sensorPromts = Integer.parseInt(statement);
+                        break;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Please answer with a valid number > 0");
+                }
+            }
 
-        while(true){
-            System.out.println("Do you want to add a device to the system? (yes/no)");
-            statement = in.nextLine();
-            if(statement.toLowerCase().equals("yes")){
-                devicePrompt(in);
+
+            //code in prompts and file writer
+            for (int x = 0; x < sensorPromts; x++) {
+                sensorPrompt(in);
             }
-            else if (statement.toLowerCase().equals("no")){
-                break;
+
+            while (true) {
+                System.out.println("How often (in minutes) do you want all of the sensors to take a reading? \n (If there are multiple times that you want, pick the smallest time)\n Ex: 2");
+                statement = in.nextLine();
+                try {
+                    if (Integer.parseInt(statement) > 0) {
+                        sleepTime = Integer.parseInt(statement) * 60 * 1000;
+                        baseSleepTime = sleepTime;
+                        break;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Please answer with a valid number > 0");
+                }
             }
-            else{
-                System.out.println("Please answer with \'yes\' or \'no\'");
+
+            while (true) {
+                System.out.println("Do you want to add a device to the system? (yes/no)");
+                statement = in.nextLine();
+                if (statement.toLowerCase().equals("yes")) {
+                    devicePrompt(in);
+                } else if (statement.toLowerCase().equals("no")) {
+                    break;
+                } else {
+                    System.out.println("Please answer with \'yes\' or \'no\'");
+                }
             }
         }
 
@@ -221,64 +278,60 @@ public class Main
         int currentMinute = Integer.parseInt(currentHourAndMinutes[1]) *60*1000;
         int theTime = currentHour + currentMinute;
         int closestTime = -1;
-        for(Device d:devices){
-            if(d.timeControl){
-                for(String s:d.times){
-                    String[] hoursAndMinutes = s.split(":");
-                    int timeAway = (Integer.parseInt(hoursAndMinutes[0])*60*60*1000) + (Integer.parseInt(hoursAndMinutes[1])*60*1000) - theTime;
-                    if(timeAway < baseSleepTime && timeAway >=0){
-                        if(closestTime == -1){
-                            closestTime = timeAway;
-                            deviceToTurnOnTime.add(d);
-                            timeToTurnOnDevice = true;
+        for(Device d:devices) {
+            if (d != null) {
+                if (d.timeControl) {
+                    for (String s : d.times) {
+                        String[] hoursAndMinutes = s.split(":");
+                        int timeAway = (Integer.parseInt(hoursAndMinutes[0]) * 60 * 60 * 1000) + (Integer.parseInt(hoursAndMinutes[1]) * 60 * 1000) - theTime;
+                        if (timeAway < baseSleepTime && timeAway >= 0) {
+                            if (closestTime == -1) {
+                                closestTime = timeAway;
+                                deviceToTurnOnTime.add(d);
+                                timeToTurnOnDevice = true;
+                            } else if (timeAway < closestTime) {
+                                closestTime = timeAway;
+                                deviceToTurnOnTime.add(d);
+                                timeToTurnOnDevice = true;
+                                deviceToTurnOffTime.clear();
+                                timeToTurnOffDevice = false;
+                            } else if (timeAway == closestTime) {
+                                closestTime = timeAway;
+                                deviceToTurnOnTime.add(d);
+                                timeToTurnOnDevice = true;
+                            }
                         }
-                        else if(timeAway < closestTime){
-                            closestTime = timeAway;
-                            deviceToTurnOnTime.add(d);
-                            timeToTurnOnDevice = true;
-                            deviceToTurnOffTime.clear();
-                            timeToTurnOffDevice = false;
-                        }
-                        else if(timeAway == closestTime){
-                            closestTime = timeAway;
-                            deviceToTurnOnTime.add(d);
-                            timeToTurnOnDevice = true;
+                    }
+                    if (d.deviceState()) {
+                        /////
+                        String[] dOnFor = d.onFor.split(":");
+                        int dTimeAway = (Integer.parseInt(dOnFor[0]) * 60 * 60 * 1000) + (Integer.parseInt(dOnFor[1]) * 60 * 1000);
+                        if (closestTime == -1) {
+                            closestTime = dTimeAway;
+                            deviceToTurnOffTime.add(d);
+                            timeToTurnOffDevice = true;
+                        } else if (closestTime > dTimeAway /**&& baseSleepTime>dTimeAway need to store how much time has passed*/) {
+                            closestTime = dTimeAway;
+                            deviceToTurnOffTime.add(d);
+                            timeToTurnOffDevice = true;
+                            deviceToTurnOnTime.clear();
+                            timeToTurnOnDevice = false;
+                        } else if (closestTime == dTimeAway) {
+                            closestTime = dTimeAway;
+                            deviceToTurnOffTime.add(d);
+                            timeToTurnOffDevice = true;
                         }
                     }
                 }
-                if(d.deviceState()){
-                    /////
-                    String[] dOnFor = d.onFor.split(":");
-                    int dTimeAway = (Integer.parseInt(dOnFor[0])*60*60*1000) + (Integer.parseInt(dOnFor[1])*60*1000);
-                    if(closestTime == -1){
-                        closestTime = dTimeAway;
-                        deviceToTurnOffTime.add(d);
-                        timeToTurnOffDevice = true;
-                    }
-                    else if(closestTime>dTimeAway /**&& baseSleepTime>dTimeAway need to store how much time has passed*/){
-                        closestTime = dTimeAway;
-                        deviceToTurnOffTime.add(d);
-                        timeToTurnOffDevice = true;
-                        deviceToTurnOnTime.clear();
-                        timeToTurnOnDevice = false;
-                    }
-                    else if (closestTime == dTimeAway){
-                        closestTime = dTimeAway;
-                        deviceToTurnOffTime.add(d);
-                        timeToTurnOffDevice = true;
-                    }
+                if (closestTime == -1) {
+                    sleepTime = baseSleepTime;
+                    timeToTurnOnDevice = false;
+                    deviceToTurnOnTime.clear();
+                } else {
+                    sleepTime = closestTime;
                 }
-            }
-            if(closestTime == -1){
-                sleepTime = baseSleepTime;
-                timeToTurnOnDevice = false;
-                deviceToTurnOnTime.clear();
-            }
-            else{
-                sleepTime = closestTime;
             }
         }
-
     }
 
     private static void sensorPrompt(Scanner in){
@@ -553,7 +606,7 @@ public class Main
                 System.out.println("Please answer with a valid number");
             }
         }
-        //**
+        //**g
         d = new Device(sensorControlled,controller,sensorDataType,criticalPoint,takeActionUp,upperActionBound,takeActionLow,lowerActionBound,pin,gpio, timeControl, times, onFor);
         for(int x = 0;x<devices.length-1;x++){
             if(devices[x] == null){
@@ -563,13 +616,7 @@ public class Main
         }
         //*/
     }
-    
-    /**
-     * 
-     */
-    public static void main(boolean restoreFromFile){
-        
-    }
+
     
     /**
      * 
@@ -595,8 +642,8 @@ public class Main
             if(s != null){
                 switch(s.getName()){
                     case "dht11":
-                        data.add("Humidity:" + s.readData(0));
-                        data.add("Temperature:" + s.readData(1));
+                        data.add(/**"Humidity:" +*/ s.readData(0) +"");//Humidity
+                        data.add(/**"Temperature:" + */s.readData(1) +"");//Temperature
                         break;
                         //need to add cases for other sensors
                     }
@@ -609,11 +656,14 @@ public class Main
             FileWriter writer;
             File file = new File("/home/pi/Desktop/SensorData.txt");
             writer = new FileWriter(file,true);
+            Date dateAndTime = new Date(System.currentTimeMillis());
+            SimpleDateFormat rightNow = new SimpleDateFormat("MM/DD/YYYY HH:MM");
+            writer.append(rightNow.format(dateAndTime) + ",");
+            System.out.println(rightNow.format(dateAndTime));
             for(String s:data){
                 if(!s.equals("")){
-                    writer.append(s);
-                    System.out.println(s);
-                    writer.append("\n");
+                    writer.append(s + ",");
+                    System.out.println(s + "\n");
                 }
             }
             writer.append("\n");
