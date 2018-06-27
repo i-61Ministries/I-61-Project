@@ -30,6 +30,9 @@ import com.pi4j.wiringpi.GpioUtil;
 /**
  * Write a description of class Main here.
  * https://askubuntu.com/questions/101746/how-can-i-execute-a-jar-file-from-the-terminal
+ *
+ * When new sensors are added edit "//SensorEditRequired" areas to implement them
+ *
  * @author Kevin Sikes
  * @version 10/14/2017
  */
@@ -48,7 +51,7 @@ public class Main
     private static ArrayList<String> data = new ArrayList<String>();
     private static ArrayList<String> previousData= new ArrayList<String>();
     //private String[] preDefinedSensorNames = new String[1];
-    private static String[] preDefinedSensorNames = {"dht11"};
+    private static String[] preDefinedSensorNames = {"dht11","SoilHumidity"};
     private static boolean firstRun = true;
     private static boolean testedActions = false;
     ///
@@ -95,14 +98,20 @@ public class Main
             //setting up sensors
             for(int k = 0; k<2;k++){
                 String[] input = reader.readLine().split(",");
-                switch(input[0]) {
+                int[] typeAry;
+                String[] typeNameAry;
+                switch(input[0]) {//SensorEditRequired
                     case "0":
-                        int[] typeAry = {0, 1};
-                        String[] typeNameAry = {"Humidity", "Temperature"};
+                        typeAry = new int[]{0, 1};
+                        typeNameAry = new String[]{"Humidity", "Temperature"};
                         sensors[numberOfSensors] = new TemperatureTest(32.0f, 122.0f, typeAry, typeNameAry, Integer.parseInt(input[1]));
                         numberOfSensors++;
                         break;
                     case "1":
+                        typeAry = new int[]{0};
+                        typeNameAry = new String[]{"Soil Humidity"};
+                        sensors[numberOfSensors] = new SoilHumiditySensor(100.0f, 0.0f, typeAry, typeNameAry, Integer.parseInt(input[1]), Integer.parseInt(input[2]));
+                        numberOfSensors++;
                         break;
                     default:
                         break;
@@ -346,13 +355,16 @@ public class Main
                 x++;
             }
             statement = in.nextLine();
-            try{
+            try{//SensorEditRequired
                 boolean notASensor = false;
+                int pin;
+                int[] typeAry;
+                String[] typeNameAry;
+                int channel;
                 switch(Integer.parseInt(statement)){
                     case 0:
-                        int[] typeAry = {0,1};
-                        String[] typeNameAry = {"Humidity","Temperature"};
-                        int pin;
+                        typeAry = new int[]{0,1};
+                        typeNameAry = new String[]{"Humidity","Temperature"};
                         while(true){
                             System.out.println("What GPIO pin will the sensor use? (EX: 21)");
                             statement = in.nextLine();
@@ -365,6 +377,34 @@ public class Main
                             }
                         }
                         sensors[numberOfSensors] = new TemperatureTest(32.0f,122.0f,typeAry ,typeNameAry,pin);
+                        numberOfSensors++;
+                        break;
+                    case 1:
+                        typeAry = new int[]{0};
+                        typeNameAry = new String[]{"Soil Humidity"};
+                        while(true){
+                            System.out.println("What GPIO pin will the sensor use? (EX: 21)");
+                            statement = in.nextLine();
+                            try{
+                                pin = Integer.parseInt(statement);
+                                break;
+                            }
+                            catch(Exception e){
+                                System.out.println("Please answer with a valid number");
+                            }
+                        }
+                        while(true){
+                            System.out.println("What channel will the Soil Humidity Sensor use? (EX: 0)");
+                            statement = in.nextLine();
+                            try{
+                                channel = Integer.parseInt(statement);
+                                break;
+                            }
+                            catch(Exception e){
+                                System.out.println("Please answer with a valid number");
+                            }
+                        }
+                        sensors[numberOfSensors] = new SoilHumiditySensor(100.0f,0.0f,typeAry ,typeNameAry,pin,channel);
                         numberOfSensors++;
                         break;
                     default: System.out.println("Please answer with a valid number");
@@ -638,14 +678,16 @@ public class Main
         else{
             firstRun = false;
         }
-        for(Sensor s:sensors){
+        for(Sensor s:sensors){//SensorEditRequired
             if(s != null){
                 switch(s.getName()){
                     case "dht11":
                         data.add(/**"Humidity:" +*/ s.readData(0) +"");//Humidity
                         data.add(/**"Temperature:" + */s.readData(1) +"");//Temperature
                         break;
-                        //need to add cases for other sensors
+                    case "SoilHumidity":
+                        data.add(/**"SoilHumidity:" +*/ s.readData(0) +"");
+                        break;
                     }
                 }
             else{

@@ -1,0 +1,13 @@
+SensorType,pin,channel
+SensorType,pin,channel
+waitTime
+device,sensorControlled,sensor,dataType,criticalPoint,reactAboveValue,aboveValue,reactBelowValue,belowValue,pin,timeControl,times,onFor
+device,sensorControlled,sensor,dataType,criticalPoint,reactAboveValue,aboveValue,reactBelowValue,belowValue,pin,timeControl,times,onFor
+device,sensorControlled,sensor,dataType,criticalPoint,reactAboveValue,aboveValue,reactBelowValue,belowValue,pin,timeControl,times,onFor
+
+0,21,0
+1,22,0
+5
+true,true,0,1,65.7,true,70.5,true,60.4,28,false,,
+true,true,0,0,20,true,40,false,,28,false,,
+true,false,,,,,,,,2,true,10:50;01:35,00:05

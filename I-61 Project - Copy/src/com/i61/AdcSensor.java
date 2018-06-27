@@ -26,9 +26,6 @@ public class AdcSensor extends Sensor {
     // ADC channel count
     //public static short ADC_CHANNEL_COUNT = 8;  // MCP3004=4, MCP3008=8
 
-    // create Pi4J console wrapper/helper
-    // (This is a utility class to abstract some of the boilerplate code)
-    //protected static final Console console = new Console();
 
 
     /**
@@ -90,60 +87,6 @@ public class AdcSensor extends Sensor {
         value |=  (result[2] & 0xff);
         return value;
     }
-
-    /**
-     * Sample SPI Program
-     *
-     * @param args (none)
-     * @throws InterruptedException
-     * @throws IOException
-     /
-    public static void main(String args[]) throws InterruptedException, IOException {
-
-        // print program title/header
-        console.title("<-- The Pi4J Project -->", "SPI test program using MCP3004/MCP3008 AtoD Chip");
-
-        // allow for user to exit program using CTRL-C
-        console.promptForExit();
-
-        // This SPI example is using the Pi4J SPI interface to communicate with
-        // the SPI hardware interface connected to a MCP3004/MCP3008 AtoD Chip.
-        //
-        // Please make sure the SPI is enabled on your Raspberry Pi via the
-        // raspi-config utility under the advanced menu option.
-        //
-        // see this blog post for additional details on SPI and WiringPi
-        // http://wiringpi.com/reference/spi-library/
-        //
-        // see the link below for the data sheet on the MCP3004/MCP3008 chip:
-        // http://ww1.microchip.com/downloads/en/DeviceDoc/21294E.pdf
-
-        // create SPI object instance for SPI for communication
-        spi = SpiFactory.getInstance(SpiChannel.CS0,
-                SpiDevice.DEFAULT_SPI_SPEED, // default spi speed 1 MHz
-                SpiDevice.DEFAULT_SPI_MODE); // default spi mode 0
-
-        // continue running program until user exits using CTRL-C
-        while(console.isRunning()) {
-            read();
-            Thread.sleep(1000);
-        }
-        console.emptyLine();
-    }
-
-    /**
-     * Read data via SPI bus from MCP3002 chip.
-     * @throws IOException
-     /
-    public static void read() throws IOException, InterruptedException {
-        for(short channel = 0; channel < ADC_CHANNEL_COUNT; channel++){
-            int conversion_value = getConversionValue(channel);
-            console.print(String.format(" | %04d", conversion_value)); // print 4 digits with leading zeros
-        }
-        console.print(" |\r");
-        Thread.sleep(250);
-    }*/
-
 
 
 }

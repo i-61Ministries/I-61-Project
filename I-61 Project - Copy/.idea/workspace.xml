@@ -17,25 +17,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/i61/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2482">
-              <caret line="146" column="25" lean-forward="false" selection-start-line="146" selection-start-column="25" selection-end-line="146" selection-end-column="25" />
+            <state relative-caret-position="323">
+              <caret line="142" column="115" lean-forward="true" selection-start-line="142" selection-start-column="115" selection-end-line="142" selection-end-column="115" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#29978#29979#0" expanded="true" />
-                <element signature="e#30002#30003#0" expanded="true" />
+                <element signature="e#32179#32180#0" expanded="true" />
+                <element signature="e#32203#32204#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Device.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Device.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/i61/Device.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="145" column="22" lean-forward="true" selection-start-line="145" selection-start-column="22" selection-end-line="145" selection-end-column="22" />
+            <state relative-caret-position="2907">
+              <caret line="175" column="64" lean-forward="false" selection-start-line="175" selection-start-column="60" selection-end-line="175" selection-end-column="64" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#7604#7605#0" expanded="true" />
@@ -48,7 +48,7 @@
       <file leaf-file-name="Sensor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/i61/Sensor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
+            <state relative-caret-position="510">
               <caret line="51" column="26" lean-forward="false" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -60,12 +60,26 @@
       <file leaf-file-name="AdcSensor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/i61/AdcSensor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="17" lean-forward="false" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
+            <state relative-caret-position="1122">
+              <caret line="72" column="50" lean-forward="false" selection-start-line="72" selection-start-column="50" selection-end-line="72" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1979#1980#0" expanded="true" />
-                <element signature="e#2006#2007#0" expanded="true" />
+                <element signature="e#1801#1802#0" expanded="true" />
+                <element signature="e#1828#1829#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SoilHumiditySensor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/i61/SoilHumiditySensor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1207">
+              <caret line="75" column="68" lean-forward="false" selection-start-line="75" selection-start-column="68" selection-end-line="75" selection-end-column="68" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2387#2388#0" expanded="true" />
+                <element signature="e#2414#2415#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -74,7 +88,7 @@
       <file leaf-file-name="TemperatureTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/i61/TemperatureTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
+            <state relative-caret-position="459">
               <caret line="48" column="58" lean-forward="false" selection-start-line="48" selection-start-column="8" selection-end-line="48" selection-end-column="58" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -104,6 +118,12 @@
       <find>devicestate</find>
       <find>sensors</find>
       <find>console</find>
+      <find>sensor</find>
+      <find>//sensor</find>
+      <find>//SensorEditRequired</find>
+      <find>predef</find>
+      <find>dht11</find>
+      <find>type</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -117,9 +137,10 @@
         <option value="$PROJECT_DIR$/src/com/i61/TemperatureTest.java" />
         <option value="$PROJECT_DIR$/src/com/i61/Sensor.java" />
         <option value="$PROJECT_DIR$/i-61_project.xml" />
-        <option value="$PROJECT_DIR$/src/com/i61/Main.java" />
-        <option value="$PROJECT_DIR$/src/com/i61/AdcSensor.java" />
         <option value="$PROJECT_DIR$/src/com/i61/Device.java" />
+        <option value="$PROJECT_DIR$/src/com/i61/AdcSensor.java" />
+        <option value="$PROJECT_DIR$/src/com/i61/SoilHumiditySensor.java" />
+        <option value="$PROJECT_DIR$/src/com/i61/Main.java" />
       </list>
     </option>
   </component>
@@ -130,7 +151,7 @@
     <option name="height" value="728" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -143,62 +164,7 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="I-61 Project - Copy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="I-61 Project - Copy" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="I-61 Project - Copy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="I-61 Project - Copy" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="I-61 Project - Copy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="I-61 Project - Copy" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="I-61 Project - Copy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="I-61 Project - Copy" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-              <item name="I_61_Project_jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="I-61 Project - Copy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="I-61 Project - Copy" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="I-61 Project - Copy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="I-61 Project - Copy" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="i61" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="I-61 Project - Copy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="I-61 Project - Copy" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="META-INF" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="I-61 Project - Copy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="project.structure.last.edited" value="Modules" />
@@ -317,7 +283,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="9" y="19" width="1346" height="728" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -356,16 +321,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/i61/Sensor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="16" lean-forward="false" selection-start-line="0" selection-start-column="16" selection-end-line="0" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/i61/TemperatureTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2516">
@@ -382,8 +337,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#29978#29979#0" expanded="true" />
-            <element signature="e#30002#30003#0" expanded="true" />
+            <element signature="e#32179#32180#0" expanded="true" />
+            <element signature="e#32203#32204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -426,8 +381,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#29978#29979#0" expanded="true" />
-            <element signature="e#30002#30003#0" expanded="true" />
+            <element signature="e#32179#32180#0" expanded="true" />
+            <element signature="e#32203#32204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -470,8 +425,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#29978#29979#0" expanded="true" />
-            <element signature="e#30002#30003#0" expanded="true" />
+            <element signature="e#32179#32180#0" expanded="true" />
+            <element signature="e#32203#32204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -514,8 +469,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#29978#29979#0" expanded="true" />
-            <element signature="e#30002#30003#0" expanded="true" />
+            <element signature="e#32179#32180#0" expanded="true" />
+            <element signature="e#32203#32204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -558,8 +513,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#29978#29979#0" expanded="true" />
-            <element signature="e#30002#30003#0" expanded="true" />
+            <element signature="e#32179#32180#0" expanded="true" />
+            <element signature="e#32203#32204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -602,8 +557,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#29978#29979#0" expanded="true" />
-            <element signature="e#30002#30003#0" expanded="true" />
+            <element signature="e#32179#32180#0" expanded="true" />
+            <element signature="e#32203#32204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -646,8 +601,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#29978#29979#0" expanded="true" />
-            <element signature="e#30002#30003#0" expanded="true" />
+            <element signature="e#32179#32180#0" expanded="true" />
+            <element signature="e#32203#32204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -690,8 +645,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#29978#29979#0" expanded="true" />
-            <element signature="e#30002#30003#0" expanded="true" />
+            <element signature="e#32179#32180#0" expanded="true" />
+            <element signature="e#32203#32204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -769,11 +724,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding>
-            <marker date="1455639510000" expanded="false" signature="0:104" ph="/.../" />
-            <marker date="1455639510000" expanded="true" signature="289:296" ph="{}" />
-            <marker date="1455639510000" expanded="true" signature="599:662" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -781,7 +731,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -789,7 +738,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="9" column="17" lean-forward="false" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -797,19 +745,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/i61/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2482">
-          <caret line="146" column="25" lean-forward="false" selection-start-line="146" selection-start-column="25" selection-end-line="146" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#29978#29979#0" expanded="true" />
-            <element signature="e#30002#30003#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -817,13 +752,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-195">
           <caret line="12" column="5" lean-forward="true" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/i61/Sensor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
+        <state relative-caret-position="510">
           <caret line="51" column="26" lean-forward="false" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -833,7 +767,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/i61/TemperatureTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
+        <state relative-caret-position="459">
           <caret line="48" column="58" lean-forward="false" selection-start-line="48" selection-start-column="8" selection-end-line="48" selection-end-column="58" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -843,24 +777,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/i61/AdcSensor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="17" lean-forward="false" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
+        <state relative-caret-position="1122">
+          <caret line="72" column="50" lean-forward="false" selection-start-line="72" selection-start-column="50" selection-end-line="72" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1979#1980#0" expanded="true" />
-            <element signature="e#2006#2007#0" expanded="true" />
+            <element signature="e#1801#1802#0" expanded="true" />
+            <element signature="e#1828#1829#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/i61/Device.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="145" column="22" lean-forward="true" selection-start-line="145" selection-start-column="22" selection-end-line="145" selection-end-column="22" />
+        <state relative-caret-position="2907">
+          <caret line="175" column="64" lean-forward="false" selection-start-line="175" selection-start-column="60" selection-end-line="175" selection-end-column="64" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#7604#7605#0" expanded="true" />
             <element signature="e#7638#7639#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/i61/SoilHumiditySensor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1207">
+          <caret line="75" column="68" lean-forward="false" selection-start-line="75" selection-start-column="68" selection-end-line="75" selection-end-column="68" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2387#2388#0" expanded="true" />
+            <element signature="e#2414#2415#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/i61/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="142" column="115" lean-forward="true" selection-start-line="142" selection-start-column="115" selection-end-line="142" selection-end-column="115" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#32179#32180#0" expanded="true" />
+            <element signature="e#32203#32204#0" expanded="true" />
           </folding>
         </state>
       </provider>
