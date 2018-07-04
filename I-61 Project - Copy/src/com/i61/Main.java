@@ -696,7 +696,7 @@ public class Main
         }
         try{
             FileWriter writer;
-            File file = new File("/home/pi/Desktop/SensorData.txt");
+            File file = new File("/home/pi/Desktop/SensorData.csv");
             writer = new FileWriter(file,true);
             Date dateAndTime = new Date(System.currentTimeMillis());
             SimpleDateFormat rightNow = new SimpleDateFormat("MM/DD/YYYY HH:MM");
