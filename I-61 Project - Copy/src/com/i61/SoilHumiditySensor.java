@@ -19,6 +19,8 @@ public class SoilHumiditySensor extends AdcSensor {
     public String[] typesName;
     public int pin;
     public int adcChannel;
+    public float dryReading;
+    public float wetReading;
 
     // SPI device
     public static SpiDevice spi = null;
@@ -30,6 +32,7 @@ public class SoilHumiditySensor extends AdcSensor {
 
     /**
      * Constructor for objects of class Sensor
+     * also calibrates the sensor
      */
     public SoilHumiditySensor(float upperBound, float lowerBound, int[] types, String[]typesName, int pin, int adcChannel)
     {
@@ -40,27 +43,45 @@ public class SoilHumiditySensor extends AdcSensor {
         this.typesName = typesName;
         this.pin = pin;
         this.adcChannel = adcChannel;
+        try{
+            System.out.println("The soil humidity sensor needs to be calibrated. Make sure the sensor is and remains dry for one minute.\n Then when prompted place the sensor in a cup of water");
+            Thread.sleep(60 * 1000);
+            float humidity = readDataWithExceptions(adcChannel);
+            dryReading = humidity;
+            System.out.println("Place the sensor in a cup of water and wait for 2 minutes");
+            Thread.sleep(2 * 60 * 1000);
+            humidity = readDataWithExceptions(adcChannel);
+            wetReading = humidity;
+            System.out.println("Calibration complete");
+        }
+        catch (Exception e){
+            System.out.println("Calibration failed. Please restart the system and try again");
+            dryReading = 1000f;
+            wetReading = 500f;
+        }
+
     }
 
 
     /**
      * x = 1000 to 500
      * x - 500 = 500 to 0
-     * (500 - (x - 500)) * 100 / 500 (when x=500 return 100, when x=1000 return 0)
+     * ((500 - (x - 500)) * 100) / 500 (when x=500 return 100, when x=1000 return 0)
+     * (((dryReading - wetReading) - (x - wetReading)) * 100) / (dryReading - wetReading) (when x<=wetReading return 100, when x>=dryReading return 0)
      * @param type (AtoD Converter channel)
      * @return %soil humidity
      */
     public float readData(int type){
         try{
             float humidity = readDataWithExceptions(adcChannel);
-            if(humidity <=550){
+            if(humidity <=wetReading){
                 return 100;
             }
-            else if(humidity >= 950){
+            else if(humidity >= dryReading){
                 return 0;
             }
             else {
-                return (((500 - (humidity - 500))*100) / 500);
+                return ((((dryReading - wetReading) - (humidity - wetReading))*100) / (dryReading - wetReading));
             }
         }
         catch (IOException e){
