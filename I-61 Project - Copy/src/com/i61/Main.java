@@ -92,7 +92,7 @@ public class Main
         try{
             File file = new File("/home/pi/Desktop/i-61-config/i-61 config.csv");
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            for(int i = 0; i<6;i++){
+            for(int i = 0; i<=6;i++){
                 reader.readLine();
             }///////
             //setting up sensors
@@ -122,26 +122,45 @@ public class Main
             sleepTime = Integer.parseInt(in)*60*1000;
             baseSleepTime = sleepTime;
             //setting up devices
+            //device,sensorControlled,sensor,dataType,criticalPoint,reactAboveValue,aboveValue,reactBelowValue,belowValue,pin,timeControl,times,onFor
+            boolean sensorControlled = false;
+            Sensor controller = null;
+            int sensorDataType = 0;
+            float criticalPoint = 0f;
+            boolean takeActionUp =false;
+            float upperActionBound = 0f;
+            boolean takeActionLow = false;
+            float lowerActionBound = 0f;
+            int pin;
+            boolean timeControl = false;
+            String[] times = {};
+            String onFor = "";
+
+            float powerUsage;
             for(int x = 0; x<3;x++){
                 String[] input = reader.readLine().split(",");
                 if(input[0].equals("true")) {
-                    boolean sensorControlled = input[1].equals(true);
-                    Sensor controller = sensors[Integer.parseInt(input[2])];
-                    int sensorDataType = Integer.parseInt(input[3]);
-                    float criticalPoint = Float.parseFloat(input[4]);
-                    boolean takeActionUp = input[5].equals("true");
-                    float upperActionBound = Float.parseFloat(input[6]);
-                    boolean takeActionLow = input[7].equals("true");
-                    float lowerActionBound = Float.parseFloat(input[8]);
-                    int pin = Integer.parseInt(input[9]);
-                    boolean timeControl = input[10].equals("true");
-                    String[] times = input[11].split(";");
-                    String onFor = input[12];
+                    sensorControlled = input[1].equals("true");
+                    if(sensorControlled) {
+                        controller = sensors[Integer.parseInt(input[2])];
+                        sensorDataType = Integer.parseInt(input[3]);
+                        criticalPoint = Float.parseFloat(input[4]);
+                        takeActionUp = input[5].equals("true");
+                        upperActionBound = Float.parseFloat(input[6]);
+                        takeActionLow = input[7].equals("true");
+                        lowerActionBound = Float.parseFloat(input[8]);
+                    }
+                    pin = Integer.parseInt(input[9]);
+                    timeControl = input[10].equals("true");
+                    if(timeControl) {
+                        times = input[11].split(";");
+                        onFor = input[12];
+                    }
 
-                    float powerUsage = 0.0f;
+                    powerUsage = 0.0f;
 
                     Device d = new Device(sensorControlled, controller, sensorDataType, criticalPoint, takeActionUp, upperActionBound, takeActionLow, lowerActionBound, pin, gpio, timeControl, times, onFor);
-                    for (int z = 0; z < devices.length - 1; x++) {
+                    for (int z = 0; z < devices.length - 1; z++) {
                         if (devices[z] == null) {
                             devices[z] = d;
                             break;
@@ -153,7 +172,8 @@ public class Main
         }
         catch (Exception e){
             System.out.println("Setup from config file failed. Please check file or complete the following prompts");
-            e.toString();
+            System.out.println(e.toString());
+            e.printStackTrace();
         }
         if(!readConfig) {
             Scanner in = new Scanner(System.in);
@@ -699,9 +719,8 @@ public class Main
             File file = new File("/home/pi/Desktop/SensorData.csv");
             writer = new FileWriter(file,true);
             Date dateAndTime = new Date(System.currentTimeMillis());
-            SimpleDateFormat rightNow = new SimpleDateFormat("MM/DD/YYYY HH:MM");
-            writer.append(rightNow.format(dateAndTime) + ",");
-            System.out.println(rightNow.format(dateAndTime));
+            writer.append(dateAndTime.toString() + ",");
+            System.out.println(dateAndTime.toString());
             for(String s:data){
                 if(!s.equals("")){
                     writer.append(s + ",");
