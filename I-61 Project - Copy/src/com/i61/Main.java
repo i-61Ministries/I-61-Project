@@ -92,11 +92,18 @@ public class Main
         try{
             File file = new File("/home/pi/Desktop/i-61-config/i-61 config.csv");
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            for(int i = 0; i<=6;i++){
+            for(int i = 0; i<=8;i++){
                 reader.readLine();
             }///////
+            int numSensors=2;
+            int numDevices=3;
+            String num = reader.readLine();
+            numSensors = Integer.parseInt(num);
+            num = reader.readLine();
+            numDevices = Integer.parseInt(num);
+
             //setting up sensors
-            for(int k = 0; k<2;k++){
+            for(int k = 0; k<numSensors;k++){
                 String[] input = reader.readLine().split(",");
                 int[] typeAry;
                 String[] typeNameAry;
@@ -137,7 +144,7 @@ public class Main
             String onFor = "";
 
             float powerUsage;
-            for(int x = 0; x<3;x++){
+            for(int x = 0; x<numDevices;x++){
                 String[] input = reader.readLine().split(",");
                 if(input[0].equals("true")) {
                     sensorControlled = input[1].equals("true");
